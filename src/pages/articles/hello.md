@@ -1,8 +1,9 @@
 ---
 title: 'Hello World'
-pubDate: 2023-12-23
+description: 'This is the new blog!'
+date: 12-24-2023
+tags: ["test"]
+layout: ../../layouts/PostLayout.astro
 ---
-
-# Hello World
 
 how's it going?

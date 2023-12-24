@@ -1,6 +1,10 @@
 ---
+interface Props {
+    pageTitle: string,
+}
+
 import Nav from '../components/Nav.astro';
-const pageTitle = "Home Page"
+const { pageTitle = "KuNet's Blog" } = Astro.props
 ---
 
 <html lang="en">
@@ -8,7 +12,6 @@ const pageTitle = "Home Page"
         <meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
 		<title>{pageTitle}</title>
     </head>
     <body>

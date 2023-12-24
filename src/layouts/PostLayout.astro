@@ -1,0 +1,11 @@
+---
+import Base from "./Base.astro";
+const { frontmatter } = Astro.props;
+---
+
+<Base pageTitle={frontmatter.title}>
+  <p>{new Date(frontmatter.date).toLocaleDateString('en-us', { year: "numeric", month: "long", day: "numeric" })}</p>
+  <p><em>{frontmatter.description}</em></p>
+
+  <slot />
+</Base>
