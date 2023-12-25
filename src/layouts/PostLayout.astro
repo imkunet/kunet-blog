@@ -3,9 +3,54 @@ import Base from "./Base.astro";
 const { frontmatter } = Astro.props;
 ---
 
-<Base pageTitle={frontmatter.title}>
-  <p>{new Date(frontmatter.date).toLocaleDateString('en-us', { year: "numeric", month: "long", day: "numeric" })}</p>
-  <p><em>{frontmatter.description}</em></p>
-
-  <slot />
+<Base pageTitle={frontmatter.title} ogTitle={frontmatter.key}>
+  <article>
+    <h1 class="font-bold text-4xl py-2">{frontmatter.title}</h1>
+    <h2 class="font-semibold text-xl italic text-gray-300 py-2">{frontmatter.description}</h2>
+    <p class="text-gray-300 font-medium py-2">{new Date(frontmatter.date).toLocaleDateString('en-us', { year: "numeric", month: "long", day: "numeric" })}</p>
+    {frontmatter.tags && 
+      <div class="my-2 gap-1 flex">{frontmatter.tags.map(tag => <a class="bg-blue-800 rounded-lg py-1 px-2 hover:underline" href={`/tags/${tag}`} data-astro-prefetch>#{tag}</a>)}</div>
+    }
+    {frontmatter.learningDisclaimer && 
+      <div class="outline outline-offset-2 outline-1 outline-red-700 bg-red-800/40 rounded p-4 my-6">
+        <p>
+          This article is marked as a <b>learning</b> article meaning that this article was written for the sake of me learning
+          through explaining a concept that is harder for me to grasp in article form. 
+        </p>
+        <br />
+        <p>
+          As such, please take any content written in this article
+          with a grain of salt. Do feel free to include any comments that might correct something incorrect I have said.
+        </p>
+      </div>
+    }
+  <br />
+  <div class="prose xl:prose-xl prose-invert">
+    <slot />
+    <hr />
+  </div>
+  </article>
+  <br />
+  <div class="giscus mb-24">
+    <noscript class="text-center w-full block italic text-gray-300">
+      Comments are unavaliable without JavaScript.
+    </noscript>
+  </div>
 </Base>
+
+<script src="https://giscus.app/client.js"
+        data-repo="imkunet/kunet-blog"
+        data-repo-id="R_kgDOK9VuKg"
+        data-category="Comments"
+        data-category-id="DIC_kwDOK9VuKs4Cb-53"
+        data-mapping="og:title"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="dark_protanopia"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>

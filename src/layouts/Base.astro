@@ -1,21 +1,45 @@
 ---
 interface Props {
-    pageTitle: string,
+    pageTitle?: string,
+    ogTitle?: string,
 }
 
+import { ViewTransitions } from 'astro:transitions';
+
 import Nav from '../components/Nav.astro';
-const { pageTitle = "KuNet's Blog" } = Astro.props
+const { pageTitle = "KuNet's Blog", ogTitle = pageTitle } = Astro.props
 ---
 
 <html lang="en">
     <head>
         <meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="preconnect" href="https://rsms.me/">
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 		<meta name="viewport" content="width=device-width" />
+        <meta property="og:title" content={ogTitle} />
+        <ViewTransitions />
 		<title>{pageTitle}</title>
     </head>
-    <body>
-        <Nav />
-        <slot />
+    <body class="macchiato bg-crust text-white">
+        <div class="mx-auto max-w-3xl p-4 xl:text-xl">
+            <Nav />
+            <slot />
+        </div>
     </body>
 </html>
+
+<style is:global>
+    @font-face {
+        font-family: 'Proto';
+        src: url(/0xProto-Regular.woff2) format('woff2');
+    }
+    html { color-scheme: dark; }
+    :root {
+        font-family: Inter, sans-serif;
+        font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+    }
+    @supports (font-variation-settings: normal) {
+        :root { font-family: InterVariable, sans-serif; }
+    }
+</style>

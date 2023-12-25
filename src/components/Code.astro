@@ -1,0 +1,46 @@
+---
+import Ext from "./Ext.astro";
+
+interface Props {
+    name: string,
+    language: string,
+    source?: string,
+}
+
+const { name, language, source } = Astro.props;
+const langs = [
+    {
+        name: "Zig",
+        url: "https://ziglang.org/",
+    },
+    {
+        name: "Bash",
+        url: "https://www.gnu.org/software/bash/",
+    },
+    {
+        name: "YAML",
+        url: "https://yaml.org/",
+    },
+];
+
+const lang = langs.filter(it => it.name.toUpperCase() == language.toUpperCase())[0];
+---
+
+<div class="bg-mantle py-2 px-4 rounded-t-lg">
+    <span class={name.includes(" ") ? "" : "font-monospace"}>{name}</span>
+</div>
+<slot />
+<div class="bg-mantle py-2 px-4 rounded-b-lg font-monospace grid grid-flow-col">
+    {source && <Ext href={source}>Original Source</Ext>}
+    <span class="text-right">{lang ? <Ext href={lang.url}>{lang.name}</Ext> : language}</span>
+</div>
+
+<style is:global>
+    .astro-code > * {
+        font-family: 'Proto' !important;
+    }
+
+    .astro-code {
+        padding: 1rem;
+    }
+</style>

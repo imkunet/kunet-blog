@@ -1,0 +1,17 @@
+---
+import Base from "../../layouts/Base.astro";
+const allPosts = await Astro.glob("../article/*.mdx");
+const tags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())].sort();
+const pageTitle = "Tags";
+---
+
+<Base pageTitle={pageTitle}>
+  <h1 class="py-6 font-semibold text-2xl">All Tags</h1>
+  <div class="flex flex-col gap-2">
+    {
+      tags.map((tag) => (
+        <a class="bg-blue-800 rounded-lg py-1 px-2 hover:underline" href={`/tags/${tag}`} data-astro-prefetch>#{tag}</a>
+      ))
+    }
+  </div>
+</Base>

@@ -1,17 +1,27 @@
 ---
-import Nav from '../components/Nav.astro';
+import Base from "../layouts/Base.astro";
+import Ext from "../components/Ext.astro";
+
+const allPosts = (await Astro.glob("./article/*.mdx"))
+	.sort((a, b) => Date.parse(b.frontmatter.date) - Date.parse(a.frontmatter.date));
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<Nav />
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base>
+	<div class="outline outline-offset-2 outline-1 outline-sky-700 bg-sky-800/40 rounded p-4">
+		<p>
+			Welcome to my engineering blog! Any code that you see that isn't attributed to someone else is written by me and is <Ext href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC0</Ext> licensed.
+			The text of this blog itself (not the written code) is <Ext href="https://creativecommons.org/licenses/by-nd/4.0/">Creative Commons CC BY-ND</Ext> licensed.
+			You can reach me directly through the details on my <Ext href="https://github.com/imkunet">GitHub README.md</Ext>.
+		</p>
+		<br />
+		<p class="italic">Opinions on this blog are my own and do not reflect the opinions of any employers past, present, and future.</p>
+	</div>
+	<h1 class="py-6 font-semibold text-2xl">Index</h1>
+	{
+		allPosts.map((post) => (
+		  <div>
+			<a href={post.url} data-astro-prefetch>{post.frontmatter.title}</a>
+		  </div>
+		))
+	}
+</Base>

@@ -1,0 +1,141 @@
+---
+title: 'Simple Pterodactyl Docker Installation'
+key: pterodactyl-docker
+description: 'A few simple Docker compose files to easily setup Pterodactyl!'
+date: 12-25-2023
+tags: ["guide", "pterodactyl", "docker"]
+layout: ../../layouts/PostLayout.astro
+---
+
+import Ext from '../../components/Ext.astro';
+import Code from '../../components/Code.astro';
+
+Pterodactyl's great! Unfortunately the documentation on how to install Pterodactyl is still lacking.
+
+When I was in middle school (*in the United States*), I tried to install Pterodactyl and ended up 
+having to restart at least 10 (!) times because of minor mistakes. The only installations that ended 
+up working first try were the installer scripts which were often harbored their own issues.
+
+We now live in the age where you can just use Docker and Docker Compose to deploy everything easily.
+It's a shame though that the official 
+<Ext href="https://pterodactyl.io/panel/1.0/getting_started.html">documentation</Ext>
+has no Docker Compose instructions to show for it.
+
+Enough waffling. Here's how to easily configure it.
+
+---
+
+Assumptions (if you know what you are doing, this guide is still fine):
+- You have a domain and access to its DNS settings
+- You are exposing things to the internet
+- Docker is installed on whatever package manager is avaliable
+- Docker is running on root
+
+---
+
+Let's start with the easy part (the panel) first (*read the instructions!*):
+
+<Code language="Bash" name="Panel's Docker Compose" source="https://raw.githubusercontent.com/pterodactyl/panel/develop/docker-compose.example.yml">
+```bash
+mkdir panel
+cd panel
+curl -so docker-compose.yml "https://raw.githubusercontent.com/pterodactyl/panel/develop/docker-compose.example.yml"
+# magic to change the default database password
+sed -i "s/\"CHANGE_ME\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"/" docker-compose.yml
+sed -i "s/\"CHANGE_ME_TOO\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"/" docker-compose.yml
+
+#
+# edit the file `docker-compose.yml`
+# change the `APP_URL` property to where your panel will be
+# i.e. https://panel.kunet.dev
+#
+
+# now it's time to start it up
+docker-compose up -d
+
+# create a user for later
+docker exec -it panel_panel_1 php artisan p:user:make
+```
+</Code>
+
+Now, let's move on to Wings which is an altered configuration since we're going to wire it up to Caddy later.
+
+<Code language="YAML" name="docker-compose.yml" source="https://raw.githubusercontent.com/pterodactyl/wings/develop/docker-compose.example.yml">
+```yaml
+version: '3.8'
+services:
+  wings:
+    image: ghcr.io/pterodactyl/wings:latest
+    restart: always
+    networks:
+      - caddy
+    ports:
+      - "2022:2022"
+    tty: true
+    environment:
+      TZ: "UTC"
+      WINGS_UID: 988
+      WINGS_GID: 988
+      WINGS_USERNAME: pterodactyl
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/lib/docker/containers/:/var/lib/docker/containers/"
+      - "/etc/pterodactyl/:/etc/pterodactyl/"
+      - "/var/lib/pterodactyl/:/var/lib/pterodactyl/"
+      - "/var/log/pterodactyl/:/var/log/pterodactyl/"
+      - "/tmp/pterodactyl/:/tmp/pterodactyl/"
+      - "/etc/ssl/certs:/etc/ssl/certs:ro"
+networks:
+  caddy:
+    external: true
+    name: caddy
+    driver: bridge
+```
+</Code>
+
+It would be a good time now to create the Caddy network:
+
+<Code language="Bash" name="Create Caddy network">
+```bash
+docker network create caddy --driver bridge --subnet 172.14.0.0/16
+```
+</Code>
+
+Oh, and here's the Caddy Docker Compose file:
+
+<Code language="YAML" name="Caddy's Docker Compose">
+```yaml
+version: '3.8'
+services:
+  caddy:
+    container_name: caddy
+    networks:
+      - caddy
+    image: caddy:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+      - "8080:8080"
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/caddy_data:/data
+      - $PWD/caddy_config:/config
+networks:
+  caddy:
+    external: true
+    name: caddy
+    driver: bridge
+```
+</Code>
+
+Something cool you <Ext href="https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes">might want to do</Ext> as well because of funny reasons:
+
+<Code language="Bash" name="Increase UDP buffer size">
+```bash
+# needs to be run as root
+sysctl -w net.core.rmem_max=2500000
+sysctl -w net.core.wmem_max=2500000
+```
+</Code>

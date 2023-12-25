@@ -1,0 +1,30 @@
+---
+interface Props {
+    href: string,
+}
+
+const { href } = Astro.props
+
+// absolutely terrible and work in progress :/
+// attr: https://codepen.io/heydon/pen/pgBBdR
+---
+
+<a href={href} target="_blank" class="underline decoration-dotted text-blue-300 hover:text-blue-400 transition-colors inline-block ext">
+    <slot />
+</a>
+
+<style>
+    .ext::after {
+        content: '';
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        text-indent: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        background-image: url(/external-link-svgrepo-com.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 80% auto;
+    }
+</style>
