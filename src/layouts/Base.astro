@@ -4,8 +4,6 @@ interface Props {
     ogTitle?: string,
 }
 
-import { ViewTransitions } from 'astro:transitions';
-
 import Nav from '../components/Nav.astro';
 const { pageTitle = "KuNet's Blog", ogTitle = pageTitle } = Astro.props
 ---
@@ -18,7 +16,6 @@ const { pageTitle = "KuNet's Blog", ogTitle = pageTitle } = Astro.props
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 		<meta name="viewport" content="width=device-width" />
         <meta property="og:title" content={ogTitle} />
-        <ViewTransitions />
 		<title>{pageTitle}</title>
     </head>
     <body class="macchiato bg-crust text-white">

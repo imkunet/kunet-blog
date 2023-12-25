@@ -10,7 +10,15 @@ export default {
               "margin-top": 0,
               "margin-bottom": 0,
               "border-radius": 0,
-            }
+            },
+            code: {
+              "&::before": {
+                content: '"" !important',
+              },
+              "&::after": {
+                content: '"" !important',
+              },
+            },
           },
         },
         xl: {
@@ -19,18 +27,18 @@ export default {
               "margin-top": 0,
               "margin-bottom": 0,
               "border-radius": 0,
-            }
+            },
           },
         },
       },
     },
     fontFamily: {
       sans: ["Inter", "ui-sans-serif", "sans-serif"],
-	    monospace: ["Proto"]
+      monospace: ["Proto"],
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
+    require("@tailwindcss/typography"),
     require("@catppuccin/tailwindcss")({
       defaultFlavour: "macchiato",
     }),

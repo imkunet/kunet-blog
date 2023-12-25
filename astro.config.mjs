@@ -3,6 +3,7 @@ import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 
 import macchiato from "./macchiato.json";
+import caddyfile from "./caddyfile.tmLanguage.json";
 
 // https://astro.build/config
 
@@ -12,7 +13,19 @@ export default defineConfig({
     tailwind(),
     mdx({
       syntaxHighlight: "shiki",
-      shikiConfig: { theme: macchiato },
+      shikiConfig: {
+        theme: macchiato,
+        langs: [
+          {
+            id: "caddy",
+            scopeName: "source.Caddyfile",
+            aliases: ["caddy", "caddyfile"],
+            grammar: caddyfile,
+          },
+          "bash",
+          "yaml",
+        ],
+      },
     }),
   ],
 });

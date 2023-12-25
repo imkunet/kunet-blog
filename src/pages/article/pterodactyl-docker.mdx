@@ -1,10 +1,10 @@
 ---
-title: 'Simple Pterodactyl Docker Installation'
+title: 'Pterodactyl Docker Compose Installation'
 key: pterodactyl-docker
-description: 'A few simple Docker compose files to easily setup Pterodactyl!'
+description: 'A few simple Docker Compose files to easily setup Pterodactyl!'
 date: 12-25-2023
 tags: ["guide", "pterodactyl", "docker"]
-layout: ../../layouts/PostLayout.astro
+layout: ../../layouts/ArticleLayout.astro
 ---
 
 import Ext from '../../components/Ext.astro';
@@ -14,7 +14,7 @@ Pterodactyl's great! Unfortunately the documentation on how to install Pterodact
 
 When I was in middle school (*in the United States*), I tried to install Pterodactyl and ended up 
 having to restart at least 10 (!) times because of minor mistakes. The only installations that ended 
-up working first try were the installer scripts which were often harbored their own issues.
+up working first try were the installer scripts which often harbored their own issues.
 
 We now live in the age where you can just use Docker and Docker Compose to deploy everything easily.
 It's a shame though that the official 
@@ -25,22 +25,39 @@ Enough waffling. Here's how to easily configure it.
 
 ---
 
-Assumptions (if you know what you are doing, this guide is still fine):
-- You have a domain and access to its DNS settings
-- You are exposing things to the internet
-- Docker is installed on whatever package manager is avaliable
-- Docker is running on root
+Basic assumptions (if you know what you are doing, this guide is still fine):
+- You have a domain and it is correctly set up to point `panel.domain.com` and `node.domain.com` to your server
+- Docker is running on root (unfortunately rootless `cgroupsv2` is broken with non Systemd systems)
+- Docker is running in an environment that supports `cgroupsv2` to limit container resource usage
+- Firewall allows: 80/tcp, 443/tcp, 443/udp, and 2022/tcp
 
 ---
+
+In the course of the guide, you should place all the individual components in separate folders.
+A file structre like the following should suffice:
+
+<Code language="tree" name="File Structure">
+```
+.
+├─ panel/
+│  └ docker-compose.yml
+├─ wings/
+│  └ docker-compose.yml
+├─ caddy/
+│  └ docker-compose.yml
+│  └ Caddyfile
+...
+```
+</Code>
 
 Let's start with the easy part (the panel) first (*read the instructions!*):
 
 <Code language="Bash" name="Panel's Docker Compose" source="https://raw.githubusercontent.com/pterodactyl/panel/develop/docker-compose.example.yml">
 ```bash
-mkdir panel
-cd panel
+# download the docker-compose.yml file
 curl -so docker-compose.yml "https://raw.githubusercontent.com/pterodactyl/panel/develop/docker-compose.example.yml"
-# magic to change the default database password
+# magic to change the default database password to a secure random value
+# (you won't need it for anything else unless you plan to reuse the database in which case you'd want to create a separate database compose file)
 sed -i "s/\"CHANGE_ME\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"/" docker-compose.yml
 sed -i "s/\"CHANGE_ME_TOO\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"/" docker-compose.yml
 
@@ -93,6 +110,8 @@ networks:
 ```
 </Code>
 
+Don't start `wings` quite yet... we'll get back to that soon enough.
+
 It would be a good time now to create the Caddy network:
 
 <Code language="Bash" name="Create Caddy network">
@@ -117,11 +136,11 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
-      - "8080:8080"
     volumes:
       - $PWD/Caddyfile:/etc/caddy/Caddyfile
       - $PWD/caddy_data:/data
       - $PWD/caddy_config:/config
+    command: "sh -c 'caddy fmt -w /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile'"
 networks:
   caddy:
     external: true
@@ -130,7 +149,25 @@ networks:
 ```
 </Code>
 
-Something cool you <Ext href="https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes">might want to do</Ext> as well because of funny reasons:
+*This is an especially cool Caddy config since it automatically formats the Caddyfile on boot!*
+
+And inside the same folder that the Caddy `docker-compose.yml` file is in is the `Caddyfile`.
+Change the domains to the domains to your domains but keep the `http://panel` and `http://wings:8080`
+as they are automatically correctly routed to the other containers through the magic of Docker's DNS:
+
+<Code language="Caddyfile" name="Caddyfile">
+```caddy
+panel.kunet.dev {
+    reverse_proxy http://panel
+}
+
+node.kunet.dev {
+    reverse_proxy http://wings:8080
+}
+```
+</Code>
+
+These commands on Linux will increase the maximum UDP buffer size, which you might want to do for <Ext href="https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes">performance reasons</Ext> for QUIC (which runs on UDP) and is enabled by default in Caddy:
 
 <Code language="Bash" name="Increase UDP buffer size">
 ```bash

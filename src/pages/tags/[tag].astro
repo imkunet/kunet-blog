@@ -1,4 +1,5 @@
 ---
+import ArticleLink from "../../components/ArticleLink.astro";
 import Base from "../../layouts/Base.astro";
 
 export async function getStaticPaths() {
@@ -26,11 +27,7 @@ const { posts } = Astro.props;
 <Base pageTitle={"Tag: " + tag}>
   <a class="bg-blue-800 rounded-lg py-1 px-2 hover:underline" href={`/tags/${tag}`} data-astro-prefetch>#{tag}</a>
   <p class="text-gray-300 font-medium py-4">{posts.length} {posts.length > 1 ? "results" : "result"}</p>
-  <>
-    {
-      posts.map((post) => (
-        <><h1>{post.url}</h1><h2>{post.frontmatter.title}</h2></>
-      ))
-    }
-  </ul>
+  <div class="flex flex-col gap-4">
+    {posts.map((post) => <ArticleLink article={post} />)}
+  </div>
 </Base>
