@@ -3,11 +3,12 @@ import Base from "../layouts/Base.astro";
 import Ext from "../components/Ext.astro";
 import ArticleLink from "../components/ArticleLink.astro";
 
-const allPosts = (await Astro.glob("./article/*.mdx"))
+const allPosts = (await Astro.glob("../articles/*/*.mdx"))
+	.filter((article) => !article.frontmatter.underConstruction)
 	.sort((a, b) => Date.parse(b.frontmatter.date) - Date.parse(a.frontmatter.date));
 ---
 
-<Base>
+<Base ogTitle="Homepage">
 	<div class="outline outline-offset-2 outline-1 outline-sky-700 bg-sky-800/40 rounded p-4">
 		<p>
 			Welcome to my engineering blog! Any code that you see that isn't attributed to someone else is written by me and is <Ext href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC0</Ext> licensed.

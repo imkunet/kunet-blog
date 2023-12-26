@@ -1,0 +1,18 @@
+---
+export async function getStaticPaths() {
+  const articles = await Astro.glob("../../articles/*/*.mdx");
+  return articles.map(article => ({
+    params: { id: article.frontmatter.key },
+    props: { post: article },
+  }));
+}
+
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+const { post } = Astro.props;
+const { Content } = post;
+---
+
+<ArticleLayout frontmatter={post.frontmatter}>
+  <Content />
+</ArticleLayout>

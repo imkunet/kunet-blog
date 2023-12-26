@@ -4,7 +4,6 @@ key: pterodactyl-docker
 description: 'A few simple Docker Compose files to easily setup Pterodactyl!'
 date: 12-25-2023
 tags: ["docker", "guide", "pterodactyl"]
-layout: ../../layouts/ArticleLayout.astro
 ---
 
 import Ext from '../../components/Ext.astro';
@@ -149,7 +148,7 @@ networks:
 
 Now:
 
-<Code language="Bash" name="Running it up (in the panel folder)" source="https://raw.githubusercontent.com/pterodactyl/panel/develop/docker-compose.example.yml">
+<Code language="Bash" name="Running it up (in the panel folder)">
 ```bash
 # magic to change the default database password to a secure random value
 # (you won't need it for anything else unless you plan to reuse the database in which case you'd want to create a separate database compose file)

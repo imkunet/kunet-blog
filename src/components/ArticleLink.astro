@@ -7,7 +7,7 @@ interface Props {
 const { article } = Astro.props
 ---
 
-<a href={article.url} data-astro-prefetch>
+<a href={`/article/${article.frontmatter.key}`} data-astro-prefetch>
     <div class="w-full outline outline-1 outline-cyan-800 hover:outline-cyan-500 transition-all duration-200 p-4 rounded-xl">
         <h2 class="font-semibold">{article.frontmatter.title}</h2>
         <h3 class="text-gray-300 italic">{article.frontmatter.description}</h3>

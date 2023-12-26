@@ -26,11 +26,11 @@ const langs = [
 const lang = langs.filter(it => it.name.toUpperCase() == language.toUpperCase())[0];
 ---
 
-<div class="bg-mantle px-4 rounded-t-lg">
+<div class="bg-mantle px-4 rounded-t-lg py-2">
     <span class={name.includes(" ") ? "" : "font-monospace"}>{name}</span>
 </div>
 <slot />
-<div class="bg-mantle px-4 rounded-b-lg font-monospace grid grid-flow-col">
+<div class="bg-mantle px-4 rounded-b-lg font-monospace grid grid-flow-col py-1">
     {source && <Ext href={source}>Original Source</Ext>}
     <span class="text-right">{lang ? <Ext href={lang.url}>{lang.name}</Ext> : language}</span>
 </div>
