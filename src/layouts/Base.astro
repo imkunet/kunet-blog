@@ -2,10 +2,19 @@
 interface Props {
     pageTitle?: string,
     ogTitle?: string,
+    ogDescription?: string,
+    ogTags?: string[],
+    ogPublished?: string,
 }
 
 import Nav from '../components/Nav.astro';
-const { pageTitle = "KuNet's Blog", ogTitle = pageTitle } = Astro.props
+const { 
+    pageTitle = "KuNet's Blog", 
+    ogTitle = pageTitle,
+    ogDescription,
+    ogTags,
+    ogPublished,
+} = Astro.props
 ---
 
 <html lang="en">
@@ -16,6 +25,11 @@ const { pageTitle = "KuNet's Blog", ogTitle = pageTitle } = Astro.props
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 		<meta name="viewport" content="width=device-width" />
         <meta property="og:title" content={ogTitle} />
+        {ogDescription && <meta property="og:description" content={ogDescription} />}
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:site_name" content="KuNet's Blog" />
+        {ogTags && ogTags.map(tag => <meta property="article:tag" content={tag} />)}
+        {ogPublished && <meta property="article:published_time" content={(new Date(Date.parse(ogPublished))).toISOString()} />}
 		<title>{pageTitle}</title>
     </head>
     <body class="macchiato bg-crust text-white">

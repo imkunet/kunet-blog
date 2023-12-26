@@ -10,7 +10,7 @@ const { href } = Astro.props
 ---
 
 <a href={href} target="_blank" class="underline decoration-dotted text-blue-300 hover:text-blue-400 transition-colors inline-block ext">
-    <slot />
+    <slot>{href}</slot>
 </a>
 
 <style>

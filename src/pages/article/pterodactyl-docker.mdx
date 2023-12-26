@@ -3,7 +3,7 @@ title: 'Pterodactyl Docker Compose Installation'
 key: pterodactyl-docker
 description: 'A few simple Docker Compose files to easily setup Pterodactyl!'
 date: 12-25-2023
-tags: ["guide", "pterodactyl", "docker"]
+tags: ["docker", "guide", "pterodactyl"]
 layout: ../../layouts/ArticleLayout.astro
 ---
 
@@ -29,14 +29,17 @@ Basic assumptions (if you know what you are doing, this guide is still fine):
 - You have a domain and it is correctly set up to point `panel.domain.com` and `node.domain.com` to your server
 - Docker is running on root (unfortunately rootless `cgroupsv2` is broken with non Systemd systems)
 - Docker is running in an environment that supports `cgroupsv2` to limit container resource usage
-- Firewall allows: 80/tcp, 443/tcp, 443/udp, and 2022/tcp
+- Firewall allows: 80/tcp, 443/tcp, 443/udp, 8080/tcp, 8080/udp, and 2022/tcp
+
+*Why open 8080/tcp and 8080/udp when we could just use 443? Pterodactyl is rather picky and using 443 exclusively
+does not play well with Caddy. It is doable though and I encourage you to give it a try if you think you've got the chops.*
 
 ---
 
 In the course of the guide, you should place all the individual components in separate folders.
 A file structre like the following should suffice:
 
-<Code language="tree" name="File Structure">
+<Code language="plaintext" name="File Structure">
 ```
 .
 ├─ 📁 panel/
@@ -52,20 +55,109 @@ A file structre like the following should suffice:
 
 Let's start with the easy part (the panel) first (*read the instructions!*):
 
-<Code language="Bash" name="Panel's Docker Compose" source="https://raw.githubusercontent.com/pterodactyl/panel/develop/docker-compose.example.yml">
-```bash
-# download the docker-compose.yml file
-curl -so docker-compose.yml "https://raw.githubusercontent.com/pterodactyl/panel/develop/docker-compose.example.yml"
-# magic to change the default database password to a secure random value
-# (you won't need it for anything else unless you plan to reuse the database in which case you'd want to create a separate database compose file)
-sed -i "s/\"CHANGE_ME\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"/" docker-compose.yml
-sed -i "s/\"CHANGE_ME_TOO\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"/" docker-compose.yml
+<Code language="YAML" name="Panel's Docker Compose" source="https://raw.githubusercontent.com/pterodactyl/panel/develop/docker-compose.example.yml">
+```yaml
+version: '3.8'
+x-common:
+  database:
+    &db-environment
+    # Do not remove the "&db-password" from the end of the line below, it is important
+    # for Panel functionality.
+    MYSQL_PASSWORD: &db-password "CHANGE_ME"
+    MYSQL_ROOT_PASSWORD: "CHANGE_ME_TOO"
+  panel:
+    &panel-environment
+
+    # !!!!!
+    # CHANGE THIS
+    APP_URL: "https://panel.kunet.dev"
+    #
+    # !!!!!
+
+    # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
+    APP_TIMEZONE: "UTC"
+    APP_SERVICE_AUTHOR: "noreply@example.com"
+    # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
+    # to generate an SSL certificate for the Panel.
+    # LE_EMAIL: ""
+  mail:
+    &mail-environment
+    MAIL_FROM: "noreply@example.com"
+    MAIL_DRIVER: "smtp"
+    MAIL_HOST: "mail"
+    MAIL_PORT: "1025"
+    MAIL_USERNAME: ""
+    MAIL_PASSWORD: ""
+    MAIL_ENCRYPTION: "true"
 
 #
-# edit the file `docker-compose.yml`
-# change the `APP_URL` property to where your panel will be
-# i.e. https://panel.kunet.dev
+# ------------------------------------------------------------------------------------------
+# DANGER ZONE BELOW
 #
+# The remainder of this file likely does not need to be changed. Please only make modifications
+# below if you understand what you are doing.
+#
+services:
+  database:
+    image: mariadb:10.5
+    restart: always
+    networks:
+      - caddy
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - "$PWD/pterodactyl/database:/var/lib/mysql"
+    environment:
+      <<: *db-environment
+      MYSQL_DATABASE: "panel"
+      MYSQL_USER: "pterodactyl"
+  cache:
+    image: redis:alpine
+    restart: always
+    networks:
+      - caddy
+  panel:
+    networks:
+      - caddy
+    image: ghcr.io/pterodactyl/panel:latest
+    restart: always
+    links:
+      - database
+      - cache
+    volumes:
+      - "$PWD/pterodactyl/var/:/app/var/"
+      - "$PWD/pterodactyl/nginx/:/etc/nginx/http.d/"
+      - "$PWD/pterodactyl/certs/:/etc/letsencrypt/"
+      - "$PWD/pterodactyl/logs/:/app/storage/logs"
+    environment:
+      <<: [*panel-environment, *mail-environment]
+      DB_PASSWORD: *db-password
+      APP_ENV: "production"
+      APP_ENVIRONMENT_ONLY: "false"
+      CACHE_DRIVER: "redis"
+      SESSION_DRIVER: "redis"
+      QUEUE_DRIVER: "redis"
+      REDIS_HOST: "cache"
+      DB_HOST: "database"
+      DB_PORT: "3306"
+networks:
+  caddy:
+    external: true
+    name: caddy
+    driver: bridge
+```
+</Code>
+
+Now:
+
+<Code language="Bash" name="Running it up (in the panel folder)" source="https://raw.githubusercontent.com/pterodactyl/panel/develop/docker-compose.example.yml">
+```bash
+# magic to change the default database password to a secure random value
+# (you won't need it for anything else unless you plan to reuse the database in which case you'd want to create a separate database compose file)
+sed -i "s/\"CHANGE_ME\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"" docker-compose.yml
+sed -i "s/\"CHANGE_ME_TOO\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"" docker-compose.yml
+
+# create Caddy network
+docker network create caddy --driver bridge --subnet 172.14.0.0/16
 
 # now it's time to start it up
 docker-compose up -d
@@ -75,7 +167,7 @@ docker exec -it panel_panel_1 php artisan p:user:make
 ```
 </Code>
 
-Now, let's move on to Wings which is an altered configuration since we're going to wire it up to Caddy later.
+Now, let's move on to `wings`:
 
 <Code language="YAML" name="docker-compose.yml" source="https://raw.githubusercontent.com/pterodactyl/wings/develop/docker-compose.example.yml">
 ```yaml
@@ -112,14 +204,6 @@ networks:
 
 Don't start `wings` quite yet... we'll get back to that soon enough.
 
-It would be a good time now to create the Caddy network:
-
-<Code language="Bash" name="Create Caddy network">
-```bash
-docker network create caddy --driver bridge --subnet 172.14.0.0/16
-```
-</Code>
-
 Oh, and here's the Caddy Docker Compose file:
 
 <Code language="YAML" name="Caddy's Docker Compose">
@@ -136,6 +220,8 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+      - "8080:8080"
+      - "8080:8080/udp"
     volumes:
       - $PWD/Caddyfile:/etc/caddy/Caddyfile
       - $PWD/caddy_data:/data
@@ -161,7 +247,7 @@ panel.kunet.dev {
     reverse_proxy http://panel
 }
 
-node.kunet.dev {
+node.kunet.dev:8080 {
     reverse_proxy http://wings:8080
 }
 ```
@@ -176,3 +262,32 @@ sysctl -w net.core.rmem_max=2500000
 sysctl -w net.core.wmem_max=2500000
 ```
 </Code>
+
+Go ahead and start up the Caddy proxy:
+
+<Code language="Bash" name="Start Caddy (in the caddy folder)">
+```bash
+docker-compose up -d
+```
+</Code>
+
+Now log into the panel and begin the node creation process in the admin area.
+
+You'll want to make sure the following options are in order:
+- Behind Proxy (we are indeed behind a proxy)
+
+Once it's been created, head to the configuration tab and copy it all to clipboard.
+
+You'll want to place the contents of the file into the path `/etc/pterodactyl/config.yml`.
+After that, you're free to start up `wings`.
+
+<Code language="Bash" name="Start Wings (in the wings folder)">
+```bash
+docker-compose up -d
+```
+</Code>
+
+When you click on the side bar button for "Nodes" and see a green heart icon next to your new node,
+you'll know that the configuration has correctly worked, and you can begin making servers to your heart's content.
+
+This guide is especially finnicky and difficult, ask questions in the comments or <Ext href="https://github.com/imkunet">contact me</Ext> directly.

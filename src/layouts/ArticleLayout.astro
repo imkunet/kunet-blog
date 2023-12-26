@@ -3,7 +3,7 @@ import Base from "./Base.astro";
 const { frontmatter } = Astro.props;
 ---
 
-<Base pageTitle={frontmatter.title} ogTitle={frontmatter.key}>
+<Base pageTitle={frontmatter.title} ogDescription={frontmatter.description} ogTags={frontmatter.tags} ogPublished={frontmatter.date}>
   <article>
     <h1 class="font-bold text-4xl py-2">{frontmatter.title}</h1>
     <h2 class="font-semibold text-xl italic text-gray-300 py-2">{frontmatter.description}</h2>
@@ -21,6 +21,14 @@ const { frontmatter } = Astro.props;
         <p>
           As such, please take any content written in this article
           with a grain of salt. Do feel free to include any comments that might correct something incorrect I have said.
+        </p>
+      </div>
+    }
+    {frontmatter.underConstruction && 
+      <div class="outline outline-offset-2 outline-1 outline-yellow-700 bg-yellow-800/40 rounded p-4 my-6">
+        <p>
+          This article is marked as <b>under construction</b> which means that this article's content is incomplete and will be
+          appended at a later date. Check back for updates!
         </p>
       </div>
     }
@@ -43,7 +51,8 @@ const { frontmatter } = Astro.props;
         data-repo-id="R_kgDOK9VuKg"
         data-category="Comments"
         data-category-id="DIC_kwDOK9VuKs4Cb-53"
-        data-mapping="og:title"
+        data-mapping="specific"
+        data-term={frontmatter.key}
         data-strict="1"
         data-reactions-enabled="1"
         data-emit-metadata="0"
