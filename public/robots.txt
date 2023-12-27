@@ -6,3 +6,5 @@ User-agent: Google-Extended
 Disallow: /
 User-agent: CCBot
 Disallow: /
+
+Sitemap: https://blog.kunet.dev/sitemap-index.xml

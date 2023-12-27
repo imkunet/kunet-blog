@@ -4,7 +4,7 @@ import Ext from "../components/Ext.astro";
 import ArticleLink from "../components/ArticleLink.astro";
 
 const allPosts = (await Astro.glob("../articles/*/*.mdx"))
-	.filter((article) => !article.frontmatter.underConstruction)
+	.filter((article) => !article.frontmatter.underConstruction || import.meta.env.DEV)
 	.sort((a, b) => Date.parse(b.frontmatter.date) - Date.parse(a.frontmatter.date));
 ---
 

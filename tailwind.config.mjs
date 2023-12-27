@@ -19,6 +19,9 @@ export default {
                 content: '"" !important',
               },
             },
+            img: {
+              "border-radius": "1.25rem",
+            }
           },
         },
         xl: {

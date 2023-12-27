@@ -1,0 +1,49 @@
+---
+title: "Rockin' around the BGP Trie"
+key: cidr-trie
+description: "An efficient data structure to perform a simple CIDR lookups"
+date: 12-26-2023
+tags: ["networking", "programming", "zig"]
+underConstruction: true
+learningDisclaimer: true
+---
+
+import { Image } from 'astro:assets';
+import cidrImage from './cidr.png';
+
+import Code from '../../components/Code.astro';
+import Ext from '../../components/Ext.astro';
+
+BGP is a cool antiquated technology that powers routing
+stuff all over the internet. The basic idea is simple: a router
+tells other routers that it should route traffic to a destination
+based on some rules. The rules are assigned to some *prefix* or
+CIDR (they are notated like `10.99.0.0/24`).
+
+If you know about IPv4, you'll know that you can actually represent
+every IPv4 address as a 32 bit integer, so a CIDR notation is literally
+a *prefix* that is `n` bits long (indicated by the `/n` part).
+
+<Image src={cidrImage} alt="Image explaining CIDR matching" />
+
+This is pretty useful for one big thing: finding out which operators are
+associated with a specific IP address. As an example, as of the time of
+writing this, one of the CIDR prefixes that Cloudflare
+<Ext href="https://bgp.tools/prefix/1.1.1.0/24">publishes</Ext> is
+`1.1.1.0/24` for their famous `1.1.1.1` DNS service.
+
+Since the prefix's length is 24 bits, that means there is 8 bits at the
+end of the address that can be changed. Because $2^8 = 256$, that means
+this CIDR covers 256 addresses that being `1.1.1.0` to `1.1.1.255`.
+
+This means if we have a list of all the published prefixes, we can take
+an IP address like `1.1.1.128` and go through each prefix to see if it matches.
+Eventually, we will end up finding the `1.1.1.0/24` prefix  published by
+Cloudflare. With that, we can conclude that `1.1.1.128` belongs to Cloudflare.
+
+BGP.tools provides a way to get the a visibility table with ASNs through
+<Ext href="https://bgp.tools/kb/api">their API</Ext>. As of writing this,
+running `cat -v table.txt | wc -l` yields 1,217,754 prefixes! That's a lot 
+of prefixes but includes both IPv4 and IPv6. Filtering to just IPv4 using
+`grep -v -F ':' table.txt | wc -l` gives 1,006,324. This is a perhaps more
+managable number.
