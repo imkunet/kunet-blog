@@ -18,7 +18,7 @@ const allPosts = (await Astro.glob("../articles/*/*.mdx"))
 		<br />
 		<p class="italic">Opinions on this blog are my own and do not reflect the opinions of any employers past, present, and future.</p>
 	</div>
-	<h1 class="py-6 font-semibold text-2xl">All Articles</h1>
+	<h1 class="py-6 font-semibold text-2xl">All Articles {import.meta.env.DEV && (<span class="text-red font-bold"> - DEV MODE - SHOWING ALL POSTS</span>)}</h1>
 	<div class="flex flex-col gap-4">
 		{ allPosts.map((post) => <ArticleLink article={post}/>) }
 	</div>

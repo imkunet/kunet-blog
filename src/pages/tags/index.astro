@@ -1,7 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 const articles = await Astro.glob("../../articles/*/*.mdx");
-const tags = [...new Set(articles.map((post) => post.frontmatter.tags).flat())].sort();
+const tags = [...new Set(articles.filter((post) => !post.frontmatter.underConstruction).map((post) => post.frontmatter.tags).flat())].sort();
 ---
 
 <Base pageTitle={"All Tags"}>
