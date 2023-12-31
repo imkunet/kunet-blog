@@ -7,7 +7,7 @@ interface Props {
     ogPublished?: string,
 }
 
-import { ViewTransitions } from 'astro:transitions';
+import { ViewTransitions, fade, slide } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
 const { 
     pageTitle = "KuNet's Blog", 
@@ -39,7 +39,9 @@ const {
     <body class="macchiato bg-crust text-white">
         <div class="mx-auto max-w-3xl p-4 xl:text-xl">
             <Nav />
-            <slot />
+            <div transition:animate={fade({ duration: '0.25s' })}>
+                <slot />
+            </div>
         </div>
     </body>
 </html>
