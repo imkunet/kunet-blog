@@ -2,12 +2,12 @@
 title: 'A Very Powerful Desktop Calculator'
 key: qalculate-is-good
 description: "It's open source and easy to use, get it right now"
-date: 12-26-2023
+date: 12-31-2023
 tags: ["guide"]
-underConstruction: true
 ---
 
 import { Image } from 'astro:assets';
+import commitsImage from './commits.png';
 import previewImage from './preview.png';
 
 import Ext from '../../components/Ext.astro';
@@ -17,9 +17,48 @@ called <Ext href="https://qalculate.github.io/">Qalculate!</Ext> for a long time
 <Ext href="https://github.com/Qalculate/libqalculate/commit/ed39e97b687f629b5129f5dd675e4d7d26df3c49">initial commit</Ext>
 on `libqalculate` was in 2016 and if you look at her GitHub activity, she's been working on it extremely consistently.
 
+| <Image src={commitsImage} alt="Image of Hanna Knutsson's GitHub commits" /> |
+|:-:|
+| *pretty much all of these are Qalculate related* |
+
 It runs across different platforms too supporting Windows, Mac, and Linux. It can even run in the command line using the `qalc`
 command interactively.
 
 | <Image src={previewImage} alt="Image of the software" /> |
 |:-:|
 | *image of what my Qalculate looks like just randomly* |
+
+Give it a <Ext href="https://qalculate.github.io/downloads.html">download</Ext> if you intend to try it out!
+Personally, I recommend using the GTK versions.
+
+---
+
+## My settings
+
+Whenever reinstalling my system, I always flick on the following settings:
+- Turn on live calculation (Mode > Calculate As You Type)
+- More precision (Mode > Precision > 32)
+- Digit grouping to commas (Edit > Preferences > Numbers & Operators > Digit grouping > `local`)
+- Ignore commas in numbers (Edit > Preferences > Numbers & Operators > Ignore commas in numbers)
+- Show keypad and history at the same time (hit the padlock next to the word Keypad in the main screen
+expand history and keypad as shown in the screenshot above)
+
+---
+
+## Some capabilities
+
+These are just some things I use Qalculate for on a day-to-day basis that I thought would be
+neat to include here.
+
+- Conversion: `100USD to HKD`, `25m/s to ft/min`, `50KiB to GB`
+- Equations with `x`: `2^x=4096`, `sqrt("apple") = 2x`
+- Annoying to do by hand: `mean(10; 20; 30)`, `factorize(727)`
+- Bits and stuff: `2 << 10`, `("snowflake" >> 22) + 1420070400000`
+
+---
+
+## Closing Thoughts
+
+I absolutely love this calculator and it is very clearly a work of love. It is many features and
+the author is responsive in GitHub issues. It's also very capable and easy to use with 
+<Ext href="https://qalculate.github.io/manual/index.html">documentation</Ext> too!

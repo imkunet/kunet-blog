@@ -18,6 +18,10 @@ export default {
               "&::after": {
                 content: '"" !important',
               },
+              "background": "#24273a",
+              "padding-right": "0.5rem",
+              "padding-left": "0.5rem",
+              "border-radius": "0.25rem",
             },
             img: {
               "border-radius": "1.25rem",

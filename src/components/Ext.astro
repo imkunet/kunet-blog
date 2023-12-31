@@ -9,9 +9,7 @@ const { href } = Astro.props
 // attr: https://codepen.io/heydon/pen/pgBBdR
 ---
 
-<a href={href} target="_blank" class="underline decoration-dotted text-blue-300 hover:text-blue-400 transition-colors inline-block ext">
-    <slot>{href}</slot>
-</a>
+<a href={href} target="_blank" class="underline decoration-dotted text-blue-300 hover:text-blue-400 transition-colors inline-block ext"><slot>{href}</slot></a>
 
 <style>
     .ext::after {
