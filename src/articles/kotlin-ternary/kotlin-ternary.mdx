@@ -1,0 +1,127 @@
+---
+title: 'Finally! A Ternary operator in Kotlin'
+key: kotlin-ternary
+description: "Not as cool or useful as it seems"
+date: 1-1-2024
+tags: ["guide", "kotlin", "programming"]
+underConstruction: true
+---
+
+import Code from '../../components/Code.astro';
+import Ext from '../../components/Ext.astro';
+
+Since 2016, there's existed <Ext href="https://discuss.kotlinlang.org/t/ternary-operator/2116">this thread</Ext>
+on Kotlin Discussions with the idea to add a ternary operator to Kotlin.
+
+If you clicked on this article, you probably know what a ternary operator is, but for
+the folks who don't know what a ternary operator is, here's what it looks like in Java:
+
+<Code language="Java" name="Ternary operator in Java">
+```java
+// in a function body
+boolean someBoolean = false;
+String s = someBoolean ? "bool is true" : "bool is false";
+
+// equivalent to
+boolean someBoolean = false;
+String s;
+if (someBoolean) {
+    s = "bool is true";
+} else {
+    s = "bool is false";
+}
+```
+</Code>
+
+As can be seen, the ternary operator is basically a concise if statement. If you want any more
+information than that, you can always visit the <Ext href="https://en.wikipedia.org/wiki/Ternary_conditional_operator">Wikipedia page</Ext> 
+for more.
+
+---
+
+## There is no Kotlin ternary operator
+
+Sorry to burst your bubble, but there is no tooth fairy, there is no bigfoot, and there is no
+<Ext href="https://discuss.kotlinlang.org/t/ternary-operator/2116/171">hope of the Kotlin ternary operator</Ext>
+in the future. 
+
+The main reason as to why it wasn't added to Kotlin was because in other languages
+like Java, the `if` keyword creates a statement and not an expression where Kotlin's
+`if` *does create* an expression.
+
+The ternary statement was created to solve problems like this in Java which are less elegant to
+solve without an `if` expression it but aren't necessary in Kotlin because of its `if` expression:
+
+<Code language="Java" name="❌ Does not compile in Java">
+```java
+// in a function body
+boolean hi = true;
+String string = if (hi) "hi there!" else "bye there!";
+//                      ^ invalid syntax!
+
+// this isn't possible in Java! we must use a
+// ternary operator to make it work!
+```
+</Code>
+
+To contrast:
+
+<Code language="Kotlin" name="✅ Using an if expression in Kotlin">
+```kotlin
+// works just fine!
+val value = if (boolean) "true" else "false"
+```
+</Code>
+
+The argument that the bottom is in Kotlin is the reason they didn't add it--the ternary
+simply exists to solve a problem that was present in Java (for instance).
+
+---
+
+## Not clickbait
+
+Alright now that we've just went over *why* there isn't a ternary operator in Kotlin as well
+as the fact that it will never *ever* appear in the language in the future, let's address this
+article's title: *"{frontmatter.title}"* (which we'll get to in a moment! *this isn't clickbait!*).
+
+There's actually some "valid" use cases for the ternary operator in a language with `if`s as
+expressions that make sense:
+- Places where it's universally understood by everyone working on it
+- Allows for more concise code (possible readability increase?)
+
+And it's for that reason we're going to just cook our own in this article.
+
+<Code language="Kotlin" name="Expressions.kt">
+```kotlin
+infix fun <T : Any> Boolean.wuh(f: Pair<() -> T, () -> T>): T = 
+    if (this) f.first() else f.second()
+
+infix fun <T : Any> Boolean.wuh(v: Pair<T, T>): T = 
+    if (this) v.first else v.second
+```
+</Code>
+
+It can be used like so:
+
+<Code language="Kotlin" name="wuh usage">
+```kotlin
+val condition = false
+
+// ❌ boring if statements 🙄
+if (condition) "hello " + sqrt(2.0) else "bye bye!"
+if (condition) "condition true" else "condition false"
+
+// ✅ using what we cooked
+condition wuh ({ "hello " + sqrt(2.0) } to { "bye bye!" })
+condition wuh ("condition true" to "condition false")
+```
+</Code>
+
+## Closing Thoughts
+As I hope you can now see, it's cumbersome to do something like this. It doesn't even save that
+many characters (at least for the examples I used above).
+
+Most times, it's more worth it to stick to `if` anyway since this makes it harder to debug too.
+
+Maybe one person out there will find this and actually decide to use it, despite its flaws
+and if you're that person: I hope this helps you.

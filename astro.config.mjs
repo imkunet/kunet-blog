@@ -30,6 +30,8 @@ export default defineConfig({
           "bash",
           "yaml",
           "zig",
+          "java",
+          "kotlin",
         ],
       },
       remarkPlugins: [remarkMath],
