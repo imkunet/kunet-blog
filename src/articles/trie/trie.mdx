@@ -180,6 +180,9 @@ pub fn query(self: @This(), ip: u32) ?[]i32 {
     // same concept as the last but since we can count up 
     // instead of counting down we can just count backwards
     var shift: u5 = 31;
+
+    var least_specific = current_node.asns;
+
     while (shift > 0) {
         const node = if (ip >> shift & 1 == 0)
             current_node.zero
@@ -189,18 +192,16 @@ pub fn query(self: @This(), ip: u32) ?[]i32 {
         // if the node exists go deeper
         // otherwise give up
         if (node) |n| {
-            // for some reasons if there is any
-            // asns at all don't traverse deeper
-            if (n.asns) |asns| return asns;
+            if (n.asns) |asns| least_specific = asns;
             current_node = n;
         } else {
-            return current_node.asns;
+            return least_specific;
         }
 
         shift -= 1;
     }
 
-    return current_node.asns;
+    return least_specific;
 }
 ```
 </Code>
