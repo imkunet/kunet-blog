@@ -1,0 +1,97 @@
+---
+title: "Branded SSH public keys"
+key: branded-ssh-public-keys
+description: "Why not spice it up a bit?"
+date: 1-9-2024
+tags: ["guide", "zig"]
+---
+
+import { Image } from 'astro:assets';
+import coolImage from './pexels-mike-bird-143967.jpg';
+
+import Code from '../../components/Code.astro';
+import Ext from '../../components/Ext.astro';
+
+### Prologue
+There's just something so elegant and human about presenting yourself in a 
+certain way. Some people dress to their gender and others wear stylish clothes.
+Ultimately it's all about human expression.
+
+| <Image src={coolImage} alt="Image of a cool thing happening" /> |
+|:-:|
+| *Photo by Mike Bird: <Ext href="https://www.pexels.com/photo/greyscale-photography-of-man-holding-on-white-building-143967/">Pexels</Ext>* |
+
+Some people even dress up their LinkedIn and GitHub profiles as much as they 
+dress up in real life. To some degree, these are equally as valid forms of
+self expression.
+
+### Problem Space
+A lot of the time I find myself sharing my SSH public key, it's for access to
+a root account on some server with 5 other people's keys in the `authorized_keys`
+file.
+
+The two gripes I have are:
+- Sometimes people are still using RSA, so their public key is quite long
+- Having the comment just be some old gmail address is rather boring
+
+> How can I be more creative while keeping the key short and the file clean?
+
+### Branded `.onion` *Vanity* Addresses
+For a while now, there's projects like <Ext href="https://github.com/cathugger/mkp224o">mkp224o</Ext>
+out there that can generate a ton of `.onion` addresses and find one that
+matches a brand.
+
+There are a few existing tools to brute force these ssh-ed25519 keys but I wanted
+to try making my own.
+
+### The First Attempt (golang)
+Oh *gourd*, where do I even begin? This one is staying closed source forever and is written in
+the <Ext href="https://go.dev/">Go</Ext> language.
+
+I chose Go for these reasons:
+- Automatic (easy) memory management
+- Fast build times (rapid iteration)
+- I know Go has high level abstractions for stuff like process launching
+- Not Java
+
+The approach was rather simple: how do we generate SSH keys? We use the command line tool, of course!
+
+<Code language="bash" name="Key pair generation (outputs it to test and test.pub)">
+```bash
+ssh-keygen -t ed25519 -C im@kunet.dev -f test -N \"\"
+```
+</Code>
+
+This would just run in a loop *ad infinitum*. No threads or *goroutines*.
+
+As you can imagine this wasn't very fast or good.
+
+### The Second Attempt (Rust)
+Rust is a pretty cool language (and it's all the rage nowadays). *Fearless concurrency*
+is cool and all and I decided it would be worth a shot.
+
+The approach was pretty much the same and just launched 16 hardware threads each one
+spawning a `ssh-keygen` process, checking its output, and then trying until it finds a match.
+
+This approach allowed for checking around 100 keys/sec on my computer. It also used up 100% of
+my CPU (*not good!*).
+
+After writing this, I got sick and tired of being in a completely safe envrionment so
+came crawling back to Zig.
+
+### Zig (the best language)
+Toying around with key generation in Rust made me feel *horrible*--relying on at least 6 crates
+just to make it work and a few more if I wanted to even attempt to get Ed25519 key pair generation
+working inside the app.
+
+All the functionality (aside from the command line interface stuff) could luckily enough easily
+be done through the Zig standard library despite the language being much less mature and having far
+less of a userbase!
+
+You can find the project <Ext href="https://github.com/imkunet/bruter-zig">here</Ext> and now my new
+public SSH keys is:
+```
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP8RbVheuZrUZmQv+5HvBxM0tGzo0wmK0cTZhTHKuNet im@kunet.dev
+```
+
+*just for fun!*
