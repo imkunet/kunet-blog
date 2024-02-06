@@ -22,4 +22,5 @@ const allPosts = (await Astro.glob("../articles/*/*.mdx"))
 	<div class="flex flex-col gap-4">
 		{ allPosts.map((post) => <ArticleLink article={post}/>) }
 	</div>
+	<div class="py-12 italic text-center text-gray-700">you're at the beginning of time</div>
 </Base>
