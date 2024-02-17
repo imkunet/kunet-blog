@@ -241,7 +241,7 @@ Change the domains to the domains to your domains but keep the `http://panel` an
 as they are automatically correctly routed to the other containers through the magic of Docker's DNS:
 
 <Code language="Caddyfile" name="Caddyfile">
-```caddy
+```
 panel.kunet.dev {
     reverse_proxy http://panel
 }
