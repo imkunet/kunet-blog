@@ -1,0 +1,39 @@
+---
+title: 'Kotlin Ternary: The follow-up'
+key: kotlin-ternary-2
+description: "Please don't use this..."
+date: 2-18-2024
+tags: ["guide", "kotlin", "programming"]
+---
+
+import Code from '../../components/Code.astro';
+import RefArticleLink from '../../components/RefArticleLink.astro';
+
+## Foreword
+This article is a sequel to this article:
+<RefArticleLink articleKey="kotlin-ternary" />
+
+After posting that article I realized a better way to
+make a ternary function in Kotlin... and it's rather *cursed*.
+
+## Hurry up
+Alright. Well. This is absolutely horrible. Never use
+this, please.
+
+<Code language="Kotlin" name="Cursed Ternary">
+```kotlin
+infix fun <T : Any> Boolean.`?`(v: T) = this to v
+infix fun <T : Any> Pair<Boolean, T>.`:`(v: T) =
+    if (first) second else v
+
+// this works because it's eval'd LTR
+// so "false ? true" becomes a pair and
+// ": false" evaluates the ternary
+val a = false `?` "true" `:` "false"
+```
+</Code>
+
+This can't be that bad... right?
+
+## It is that bad
+Don't get fired for using this and don't blame it on me :)
