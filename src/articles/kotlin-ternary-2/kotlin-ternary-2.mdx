@@ -36,4 +36,8 @@ val a = false `?` "true" `:` "false"
 This can't be that bad... right?
 
 ## It is that bad
-Don't get fired for using this and don't blame it on me :)
+Yeah, the thing that stands out as being the worst part is that no matter
+what, the true branch will be evaluated meaning you can't use any thing that
+creates a side effect as values for the branches of the ternary. You can of course
+adapt the function to take in `() -> T` parameters, but I'll leave that as an
+exercise to the reader :^)
