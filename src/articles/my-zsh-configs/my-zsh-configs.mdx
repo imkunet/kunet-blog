@@ -1,0 +1,76 @@
+---
+title: 'My zsh configs'
+key: my-zsh-configs
+description: "Wrote this to easily find it"
+date: 4-26-2024
+tags: ["guide"]
+---
+
+import Code from '../../components/Code.astro';
+
+Nothing big in this post, just sharing my current zsh config
+
+<Code language="Zsh" name="~/.kushell">
+```sh
+# needed for this config:
+# antigen
+# fzf
+# starship
+# zsh
+# git
+
+source /usr/share/zsh/share/antigen.zsh
+
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+antigen use oh-my-zsh
+# see https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/command-not-found to find what to install
+antigen bundle command-not-found
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle fzf
+antigen bundle Aloxaf/fzf-tab
+antigen apply
+
+autoload -Uz compinit
+compinit
+
+export STARSHIP_CONFIG=~/.kushell-starship.toml
+eval "$(starship init zsh)"
+```
+</Code>
+
+---
+
+<Code language="TOML" name="~/.kushell-starship.toml">
+```toml
+add_newline = false
+
+[character]
+success_symbol = '[🌸](green)'
+error_symbol = '[✗](bold red)'
+
+[line_break]
+disabled = true
+
+[nodejs]
+detect_files = ['!video.ts', '!audio.ts']
+
+[cmd_duration]
+min_time=0
+
+[zig]
+symbol=' '
+```
+</Code>
+
+---
+
+(Now add this to the beginning of your .zshrc)
+
+<Code language="Zsh" name="~/.zshrc">
+```sh
+# ...
+source ~/.kushell
+```
+</Code>

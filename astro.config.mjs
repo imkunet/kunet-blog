@@ -20,7 +20,7 @@ export default defineConfig({
       syntaxHighlight: "shiki",
       shikiConfig: {
         theme: macchiato,
-        langs: ["bash", caddyfile, "yaml", "zig", "java", "kotlin"],
+        langs: ["bash", caddyfile, "yaml", "zig", "java", "kotlin", "toml"],
       },
       remarkPlugins: [remarkMath],
       rehypePlugins: [rehypeKatex],
