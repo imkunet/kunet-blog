@@ -152,8 +152,8 @@ Now:
 ```bash
 # magic to change the default database password to a secure random value
 # (you won't need it for anything else unless you plan to reuse the database in which case you'd want to create a separate database compose file)
-sed -i "s/\"CHANGE_ME\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"" docker-compose.yml
-sed -i "s/\"CHANGE_ME_TOO\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"" docker-compose.yml
+sed -i "s/\"CHANGE_ME\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"/" docker-compose.yml
+sed -i "s/\"CHANGE_ME_TOO\"/\"$(tr -dc A-Za-z0-9 < /dev/random | head -c 8)\"/" docker-compose.yml
 
 # create Caddy network
 docker network create caddy --driver bridge --subnet 172.14.0.0/16
