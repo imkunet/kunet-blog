@@ -1,43 +1,54 @@
 ---
-title: 'My zsh configs'
+title: "My zsh configs"
 key: my-zsh-configs
-description: "Wrote this to easily find it"
-date: 4-26-2024
+description: "Wrote this to easily find it (updated)"
+date: 6-20-2024
 tags: ["guide"]
 ---
 
 import Code from '../../components/Code.astro';
+import Ext from '../../components/Ext.astro';
 
-Nothing big in this post, just sharing my current zsh config
+Nothing big in this post, just sharing my current zsh config. Recommended to patch your fonts
+with <Ext href="https://www.nerdfonts.com/">Nerd Fonts</Ext> (or use one of their pre-patched fonts).
 
 <Code language="Zsh" name="~/.kushell">
 ```sh
 # needed for this config:
-# antigen
-# fzf
-# starship
 # zsh
 # git
 
-source /usr/share/zsh/share/antigen.zsh
+# can be expressed as on Arch:
+# yay/paru -S zsh git
+
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-antigen use oh-my-zsh
+# load fzf
+zinit ice from"gh-r" as"program"
+zinit light junegunn/fzf
+
+zinit snippet OMZP::fzf
 # see https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/command-not-found to find what to install
-antigen bundle command-not-found
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle fzf
-antigen bundle Aloxaf/fzf-tab
-antigen apply
+#zinit snippet OMZP::command-not-found
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-autosuggestions
+zinit light Aloxaf/fzf-tab
 
 autoload -Uz compinit
 compinit
 
 export STARSHIP_CONFIG=~/.kushell-starship.toml
-eval "$(starship init zsh)"
-```
+zinit ice as"command" from"gh-r" \
+ atclone"./starship init zsh > init.zsh; ./starship completions zsh > \_starship" \
+ atpull"%atclone" src"init.zsh"
+zinit light starship/starship
+
+````
 </Code>
 
 ---
