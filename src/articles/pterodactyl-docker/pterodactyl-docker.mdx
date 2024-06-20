@@ -35,6 +35,11 @@ does not play well with Caddy. It is doable though and I encourage you to give i
 
 ---
 
+**NOTE**: If you've installed Docker Compose and the `docker-compose` command doesn't work for you, instead 
+use the `docker compose` command in place of all of the uses of `docker-compose` in this guide.
+
+---
+
 In the course of the guide, you should place all the individual components in separate folders.
 A file structre like the following should suffice:
 
@@ -46,8 +51,9 @@ A file structre like the following should suffice:
 ├─ 📁 wings/
 │  └ 📄 docker-compose.yml
 ├─ 📁 caddy/
+│  └ 📁 caddy/
+│    └ 📄 Caddyfile
 │  └ 📄 docker-compose.yml
-│  └ 📄 Caddyfile
 ...
 ```
 </Code>
@@ -76,6 +82,7 @@ x-common:
     # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
     APP_TIMEZONE: "UTC"
     APP_SERVICE_AUTHOR: "noreply@example.com"
+  # Not strictly necessary unless you need to send mail.
   mail:
     &mail-environment
     MAIL_FROM: "noreply@example.com"
@@ -101,7 +108,7 @@ services:
       - caddy
     command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - "$PWD/pterodactyl/database:/var/lib/mysql"
+      - "./pterodactyl/database:/var/lib/mysql"
     environment:
       <<: *db-environment
       MYSQL_DATABASE: "panel"
@@ -120,10 +127,10 @@ services:
       - database
       - cache
     volumes:
-      - "$PWD/pterodactyl/var/:/app/var/"
-      - "$PWD/pterodactyl/nginx/:/etc/nginx/http.d/"
-      - "$PWD/pterodactyl/certs/:/etc/letsencrypt/"
-      - "$PWD/pterodactyl/logs/:/app/storage/logs"
+      - "./pterodactyl/var/:/app/var/"
+      - "./pterodactyl/nginx/:/etc/nginx/http.d/"
+      - "./pterodactyl/certs/:/etc/letsencrypt/"
+      - "./pterodactyl/logs/:/app/storage/logs"
     environment:
       <<: [*panel-environment, *mail-environment]
       DB_PASSWORD: *db-password
@@ -219,9 +226,9 @@ services:
       - "8080:8080"
       - "8080:8080/udp"
     volumes:
-      - $PWD/Caddyfile:/etc/caddy/Caddyfile
-      - $PWD/caddy_data:/data
-      - $PWD/caddy_config:/config
+      - ./caddy:/etc/caddy
+      - ./caddy_data:/data
+      - ./caddy_config:/config
     command: "sh -c 'caddy fmt -w /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile'"
 networks:
   caddy:
@@ -233,9 +240,25 @@ networks:
 
 *This is an especially cool Caddy config since it automatically formats the Caddyfile on boot!*
 
-And inside the same folder that the Caddy `docker-compose.yml` file is in is the `Caddyfile`.
-Change the domains to the domains to your domains but keep the `http://panel` and `http://wings:8080`
-as they are automatically correctly routed to the other containers through the magic of Docker's DNS:
+<Code language="plaintext" name="File Structure">
+```
+.
+├─ 📁 panel/
+│  └ 📄 docker-compose.yml
+├─ 📁 wings/
+│  └ 📄 docker-compose.yml
+├─ 📁 caddy/
+│  └ 📁 caddy/
+│    └ 📄 Caddyfile
+│  └ 📄 docker-compose.yml
+...
+```
+</Code>
+
+And inside the `caddy` folder which is in the same folder that the Caddy `docker-compose.yml` file is 
+in is the `Caddyfile` (see file structure). Change the domains to the domains to your domains but 
+keep the `http://panel` and `http://wings:8080` as they are automatically correctly routed to the other
+containers through the magic of Docker's DNS:
 
 <Code language="Caddyfile" name="Caddyfile">
 ```Caddyfile
