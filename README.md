@@ -1,2 +1,6 @@
 # the kunet blog
-this is it
+
+instructions:
+- use npm
+- do `npm i`
+- ok cool
