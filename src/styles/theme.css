@@ -1,0 +1,12 @@
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: "Libre Baskerville", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --color-hotpink: var(--kunet-color-hotpink);
+  --color-hotpink-light: --alpha(var(--kunet-color-hotpink) / 80%);
+}
+
+@layer base {
+  :root {
+    --kunet-color-hotpink: #ec4899;
+  }
+}

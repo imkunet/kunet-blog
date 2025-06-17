@@ -5,7 +5,7 @@ import { embeddedMarkdownToHtml } from '@/utils/embedded-markdown';
 import { allArticlesButHidden } from '@/utils/article-utils';
 
 const preamble = embeddedMarkdownToHtml(`
-# KuNet's Blog
+## KuNet's Blog
 Heyo~! Welcome to my little blog site.
 - Unattributed code is [Creative Commons CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 - The text of this blog is [Creative Commons CC BY-ND](https://creativecommons.org/licenses/by-nd/4.0/).
@@ -17,11 +17,15 @@ Heyo~! Welcome to my little blog site.
 
 <Base ogTitle="Homepage" ogDescription="All the posts">
   <div
-    class="article tight-markdown prose mx-auto w-full pb-4 xl:prose-lg dark:prose-invert"
+    class={`
+      article tight-markdown prose prose-article mx-auto w-full pb-4
+      xl:prose-lg
+      dark:prose-invert
+    `}
     set:html={preamble}
   />
   <div class="flex flex-col gap-4">
     {allArticlesButHidden.map((post) => <ArticleLink article={post} />)}
   </div>
-  <div class="py-16 text-center italic text-subtext0/50">you're at the beginning of time</div>
+  <div class="text-subtext0/50 py-16 text-center italic">you're at the beginning of time</div>
 </Base>

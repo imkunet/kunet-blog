@@ -3,9 +3,15 @@ import Base from '@/layouts/Base.astro';
 ---
 
 <Base>
-  <div class="prose mx-auto w-full py-4 xl:prose-lg dark:prose-invert">
+  <div
+    class={`
+      prose mx-auto w-full py-4
+      xl:prose-lg
+      dark:prose-invert
+    `}
+  >
     <h1 class="!my-4">http/404</h1>
-    <h2 class="!my-4 text-subtext1">What you're looking for doesn't seem to be here...</h2>
+    <h2 class="text-subtext1 !my-4">What you're looking for doesn't seem to be here...</h2>
 
     <hr />
 

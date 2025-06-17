@@ -7,16 +7,28 @@ import Tags from '@/assets/icons/tags.svg?raw';
   <a href="/" title="Home">
     <img alt="logo" src="/favicon.svg" class="inline-block w-12 select-none" />
   </a>
-  <div class="flex items-center gap-4 text-overlay0">
+  <div
+    class={`
+      text-overlay0 flex items-center gap-4
+      print:!hidden
+    `}
+  >
     <a
-      class="transition-colors duration-200 hover:text-text"
+      class={`
+        hover:text-text
+        transition-colors duration-200
+      `}
       href="/tags"
       title="All tags"
       set:html={Tags}
     />
     <button
       id="theme-switcher"
-      class="yesscript transition-colors duration-200 hover:text-text"
+      class={`
+        hover:text-text
+        transition-colors duration-200
+        noscript:hidden
+      `}
       aria-label="Theme Switcher (System)"
       title="System"
       set:html={SunMoon}

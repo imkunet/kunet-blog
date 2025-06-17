@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Lilex';
+  /* https://blog.kunet.dev/fonts/Lilex.License.md */
+  src: url(/fonts/Lilex.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'MonaspaceRadon';
+  /* https://blog.kunet.dev/fonts/MonaSpaceRadon.License.md */
+  src: url(/fonts/MonaspaceRadon.woff2) format('woff2');
+}
+
+:root {
+  font-family: Inter, sans-serif;
+  font-feature-settings:
+    'liga' 1,
+    'calt' 1; /* fix for Chrome */
+}
+
+@supports (font-variation-settings: normal) {
+  :root {
+    font-family: InterVariable, sans-serif;
+  }
+}

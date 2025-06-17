@@ -33,7 +33,11 @@ Just a list of the tags on here.`);
 
 <Base pageTitle="All Tags" ogDescription="Tag listing">
   <div
-    class="article tight-markdown prose mx-auto w-full pb-4 xl:prose-lg dark:prose-invert"
+    class={`
+      article tight-markdown prose mx-auto w-full pb-4
+      xl:prose-lg
+      dark:prose-invert
+    `}
     set:html={preamble}
   />
   <div class="flex flex-col gap-4">
@@ -42,7 +46,11 @@ Just a list of the tags on here.`);
         .map((frequency) =>
           frequencyTag[frequency].map((tag) => (
             <a
-              class="flex justify-between text-nowrap rounded bg-surface0/50 px-4 py-2 text-text outline outline-1 outline-surface1/70 transition-colors hover:bg-surface1"
+              class={`
+                from-surface0/20 to-surface1/40 outline-surface1/70 text-text flex justify-between
+                rounded bg-radial from-80% px-4 py-2 text-nowrap outline-1 transition-colors
+                hover:bg-surface1
+              `}
               href={`/tags/${tag}`}
             >
               <span class="flex flex-row items-center gap-4">

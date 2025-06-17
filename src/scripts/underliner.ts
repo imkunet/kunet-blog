@@ -66,10 +66,10 @@ const createUnderliner = (parent: HTMLElement): [() => void, () => void] => {
 };
 
 const createUnderliners = () => {
-  const articleLinks = document.querySelectorAll('.articleLink');
+  const articleLinks = document.querySelectorAll('.article-link');
   articleLinks.forEach((articleLink) => {
     const element = articleLink as HTMLElement;
-    const child = element.querySelector('.articleTitle') as HTMLElement | null;
+    const child = element.querySelector('.article-title') as HTMLElement | null;
     if (!child) return;
 
     const [animateIn, animateOut] = createUnderliner(child);

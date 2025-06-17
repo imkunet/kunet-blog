@@ -20,20 +20,29 @@ const {
 } = Astro.props as Props;
 ---
 
-<html lang="en" class="latte bg-base dark:macchiato selection:bg-pink-500/30" data-theme="system">
+<html
+  lang="en"
+  class={`
+    bg-base
+    light:latte
+    dark:macchiato
+    selection:bg-pink-500/30
+  `}
+  data-theme="system"
+>
   <head>
     <!-- external links -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/4.0.2/inter.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/4.1.0/inter.min.css"
       integrity="sha512-XD/ZWPxJjHT4yMgqT8cn3649HjjeQMGE/A4jWZnxxypfDQRKL0sSY/rrRF0AG4r4W1/85kPHUo/KMHYyE7g9Fw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/4.0.2/inter-variable.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/4.1.0/inter-variable.min.css"
       integrity="sha512-bLYZ3Wj01ZAbPTlW2j1ZUP40wSo8POvQPMFT028oEvldzi8KL6HWzvAInsA+KpT2RQ4vwPG4isyEpGxI+RbGfg=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
@@ -81,7 +90,13 @@ const {
     <title>{pageTitle}</title>
   </head>
   <body>
-    <div class="mx-auto max-w-2xl p-4 lg:max-w-3xl xl:text-xl">
+    <div
+      class={`
+        mx-auto max-w-2xl p-4
+        lg:max-w-3xl
+        xl:text-xl
+      `}
+    >
       <Nav />
       <div transition:animate={fade({ duration: '0.25s' })}>
         <slot />

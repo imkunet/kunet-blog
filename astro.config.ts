@@ -8,9 +8,9 @@ import { remarkToc } from './src/plugins/remark/toc';
 import type { RehypePlugin } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
+import tailwindcss from '@tailwindcss/vite';
 import expressiveCode, { ExpressiveCodeTheme } from 'astro-expressive-code';
 import { defineConfig } from 'astro/config';
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic';
@@ -50,9 +50,12 @@ export default defineConfig({
         rehypeAutolinkHeadings,
         {
           behavior: 'append',
-          content: fromHtmlIsomorphic(`<span class="link-heading">${linkIcon}</span>`, {
-            fragment: true,
-          }).children,
+          content: fromHtmlIsomorphic(
+            `<span class="print:!hidden link-heading">${linkIcon}</span>`,
+            {
+              fragment: true,
+            },
+          ).children,
         },
       ],
       [
@@ -72,9 +75,6 @@ export default defineConfig({
     gfm: true,
   },
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
     expressiveCode({
       plugins: [
         attribution(),
@@ -103,9 +103,10 @@ export default defineConfig({
           editorTabsMarginBlockStart: '-0.5rem',
           editorTabsMarginInlineStart: '1rem',
           editorActiveTabIndicatorTopColor: '#ec4899',
-          editorActiveTabForeground: 'rgb(var(--ctp-text))',
-          //editorBackground:
-          // 'radial-gradient(circle, rgb(76 76 76 / 10%) 1px, rgba(0, 0, 0, 0) 1px) 0% 0% / 1rem 1rem',
+          editorActiveTabForeground: 'var(--color-text)',
+          // someone told me this looks bad; never uncomment this EVER!!
+          // editorBackground:
+          //   'radial-gradient(circle, rgb(76 76 76 / 10%) 1px, rgba(0, 0, 0, 0) 1px) 0% 0% / 1rem 1rem',
         },
       },
       themes: [generateTheme('ctp-latte'), generateTheme('ctp-macchiato')],
@@ -115,5 +116,8 @@ export default defineConfig({
   ],
   build: {
     assets: 'assets',
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
 });

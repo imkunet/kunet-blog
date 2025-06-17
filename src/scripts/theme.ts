@@ -76,7 +76,6 @@ const loadTheme = (theme: string | null) => {
   if (theme === 'light') {
     html.classList.remove(darkTheme);
     html.classList.add(lightTheme);
-    html.classList.remove(`dark:${darkTheme}`);
     html.setAttribute('data-theme', 'light');
     giscusTheme(giscusLight);
     themeColorMeta?.setAttribute('content', lightThemeColor);
@@ -86,16 +85,13 @@ const loadTheme = (theme: string | null) => {
   if (theme === 'dark') {
     html.classList.remove(lightTheme);
     html.classList.add(darkTheme);
-    html.classList.remove(`dark:${darkTheme}`);
     html.setAttribute('data-theme', 'dark');
     giscusTheme(giscusDark);
     themeColorMeta?.setAttribute('content', darkThemeColor);
     return;
   }
 
-  html.classList.add(lightTheme);
   html.classList.remove(darkTheme);
-  html.classList.add(`dark:${darkTheme}`);
   html.setAttribute('data-theme', 'system');
   giscusTheme(giscusAdaptive);
   themeColorMeta?.setAttribute(

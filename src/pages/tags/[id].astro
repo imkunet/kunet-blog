@@ -13,13 +13,16 @@ interface Props {
 
 export async function getStaticPaths() {
   const allTags: Set<string> = new Set(
-    allArticlesButHidden.map((article) => article.frontmatter.tags).flat(),
+    allArticlesButHidden
+      .map((article) => article.frontmatter.tags)
+      .flat()
+      .filter((v) => v),
   );
 
   return [...allTags].map((tag) => ({
     params: { id: tag },
     props: {
-      posts: allArticlesButHidden.filter((post) => post.frontmatter.tags.includes(tag)),
+      posts: allArticlesButHidden.filter((post) => post.frontmatter?.tags?.includes(tag) || false),
       tag: tag,
     },
   }));
@@ -40,11 +43,15 @@ ${tagMap[tag] ?? ''}`);
 
 <Base pageTitle={`Tag: "${tag}"`} ogDescription={`Articles tagged with "${tag}"`}>
   <div
-    class="article tight-markdown prose mx-auto w-full pb-4 xl:prose-lg dark:prose-invert"
+    class={`
+      article tight-markdown prose mx-auto w-full pb-4
+      xl:prose-lg
+      dark:prose-invert
+    `}
     set:html={preamble}
   />
   <div class="flex flex-col gap-4">
     {posts.map((post) => <ArticleLink article={post} />)}
   </div>
-  <div class="py-16 text-center italic text-subtext0/50">With perhaps more to come...</div>
+  <div class="text-subtext0/50 py-16 text-center italic">With perhaps more to come...</div>
 </Base>

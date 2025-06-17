@@ -18,9 +18,7 @@ export const extractFilePathData = (filePath: string): { date: number; title: st
 };
 
 export const allArticles = Object.values(
-  import.meta.glob<MDXInstance<Frontmatter>>('@/articles/*/*/*.mdx', {
-    eager: true,
-  }),
+  import.meta.glob<MDXInstance<Frontmatter>>('@/articles/*/*/*.mdx', { eager: true }),
 ).sort((a, b) => extractFilePathData(b.file).date - extractFilePathData(a.file).date);
 
 export const allArticlesButHidden = allArticles.filter(

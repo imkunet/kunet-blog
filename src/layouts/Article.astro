@@ -67,14 +67,37 @@ const { date } = extractFilePathData(file);
   ogPublished={date}
 >
   <article>
-    <div class="article prose mx-auto w-full py-4 xl:prose-lg dark:prose-invert">
+    <div
+      class={`
+        article prose mx-auto w-full py-4
+        xl:prose-lg
+        dark:prose-invert
+      `}
+    >
+      {
+        frontmatter.hidden && (
+          <div
+            class={`
+              candy-stripes mb-8 w-full rounded-lg py-2 font-bold text-white outline-1
+              outline-offset-2 outline-yellow-600
+            `}
+          >
+            <div class="flex w-full items-center justify-center gap-2">
+              <Fragment set:html={EyeOff} /> This article is hidden
+            </div>
+          </div>
+        )
+      }
       {image && <Image src={image} alt={frontmatter.heroAlt || 'Hero Image'} />}
       <div class="embedded-markdown" set:html={renderedTitle} />
       <div
-        class="embedded-markdown py-2 prose-headings:text-subtext1"
+        class={`
+          embedded-markdown py-2
+          prose-headings:text-subtext1
+        `}
         set:html={renderedSubtitle}
       />
-      <p class="!my-2 text-subtext0">
+      <p class="text-subtext0 !my-2">
         <span data-date={date}>
           {
             new Date(date).toLocaleDateString('en-us', {
@@ -93,12 +116,17 @@ const { date } = extractFilePathData(file);
           <div class="not-prose no-scrollbar my-2 flex w-full gap-4 overflow-scroll p-1">
             {frontmatter.tags.map((tag) => (
               <a
-                class="flex flex-row gap-2 text-nowrap rounded-l-3xl rounded-r-lg bg-surface0/50 px-2 outline outline-1 outline-surface1/70 transition-colors hover:bg-surface1"
+                class={`
+                  from-surface0/30 to-surface1/30 outline-surface1/70 flex flex-row gap-2
+                  rounded-l-3xl rounded-r-lg bg-radial from-40% px-2 text-nowrap outline-1
+                  transition-colors
+                  hover:bg-surface1 hover:outline-surface1
+                `}
                 href={`/tags/${tag}`}
                 tabindex="-1"
                 title={tag}
               >
-                <span class="select-none text-surface2">•</span> {tag}
+                <span class="text-surface2 select-none">•</span> {tag}
               </a>
             ))}
           </div>
@@ -106,7 +134,12 @@ const { date } = extractFilePathData(file);
       }
       {
         frontmatter.learningDisclaimer && (
-          <div class="not-prose my-6 flex flex-col gap-4 rounded bg-rose-800/20 p-4 outline outline-1 outline-offset-2 outline-rose-700/60">
+          <div
+            class={`
+              not-prose my-6 flex flex-col gap-4 rounded bg-rose-800/20 p-4 outline-1
+              outline-offset-2 outline-rose-700/60
+            `}
+          >
             <p>
               This article is marked as a <b>learning</b> article, which means that this article was
               written for the sake of me learning through explaining.
@@ -120,7 +153,12 @@ const { date } = extractFilePathData(file);
       }
       {
         frontmatter.underConstruction && (
-          <div class="not-prose my-6 rounded bg-yellow-800/40 p-4 outline outline-1 outline-offset-2 outline-yellow-700">
+          <div
+            class={`
+              not-prose my-6 rounded bg-yellow-800/40 p-4 outline-1 outline-offset-2
+              outline-yellow-700
+            `}
+          >
             <p>
               This article is marked as <b>under construction</b> which means that this article's
               content is incomplete and will be updated at a later date. Check back for updates!
@@ -130,7 +168,12 @@ const { date } = extractFilePathData(file);
       }
       {
         frontmatter.notExpert && (
-          <div class="not-prose my-6 rounded-lg bg-rosewater/30 p-4 outline outline-1 outline-offset-2 outline-rosewater/50">
+          <div
+            class={`
+              not-prose bg-rosewater/30 outline-rosewater/50 my-6 rounded-lg p-4 outline-1
+              outline-offset-2
+            `}
+          >
             <p>
               This article is about a (probably complicated) topic that is not written by an expert
               in this topic. Take everything with a grain of salt, and feel free to leave new
@@ -139,45 +182,52 @@ const { date } = extractFilePathData(file);
           </div>
         )
       }
-      {
-        frontmatter.hidden && (
-          <div class="candy-stripes w-full py-2 my-4 rounded-lg text-white font-bold outline outline-1 outline-offset-2 outline-yellow-600">
-            <div class="flex items-center gap-2 w-full justify-center">
-              <Fragment set:html={EyeOff} /> this article is hidden
-            </div>
-          </div>
-        )
-      }
-      <slot />
-      <hr />
+      <div class="prose-article">
+        <slot />
+      </div>
+      <hr class="print:!hidden" />
     </div>
   </article>
-  <div
-    class="prose prose-sm mb-8 flex w-full max-w-full flex-row justify-between gap-4 dark:prose-invert"
-  >
-    <a
-      href={`https://github.com/imkunet/kunet-blog/blob/next/${filePath}`}
-      target="_blank"
-      class="opacity-50 transition-opacity hover:opacity-100"
-    >
-      <div class="flex flex-row gap-2"><Fragment set:html={GitHubIcon} /> Source</div>
-    </a>
-    <a
-      href="https://github.com/imkunet/kunet-blog/discussions/categories/comments"
-      target="_blank"
-      class="opacity-50 transition-opacity hover:opacity-100"
-    >
-      <div class="flex flex-row gap-2"><Fragment set:html={MessagesIcon} /> Discussion</div>
-    </a>
-  </div>
 
-  <div class="my-12 flex flex-col gap-4">
-    <div class="w-full text-center text-xl font-medium text-subtext1">{moreText}</div>
-    <ArticleLink article={latestPost} />
-    <ArticleLink article={randomPost} />
-  </div>
+  <div class="print:!hidden">
+    <div
+      class={`
+        prose prose-sm mb-8 flex w-full max-w-full flex-row justify-between gap-4
+        dark:prose-invert
+      `}
+    >
+      <a
+        href={`https://github.com/imkunet/kunet-blog/blob/next/${filePath}`}
+        target="_blank"
+        class={`
+          opacity-50 transition-opacity
+          hover:opacity-100
+        `}
+      >
+        <div class="flex flex-row gap-2"><Fragment set:html={GitHubIcon} /> Source</div>
+      </a>
+      <a
+        href="https://github.com/imkunet/kunet-blog/discussions/categories/comments"
+        target="_blank"
+        class={`
+          opacity-50 transition-opacity
+          hover:opacity-100
+        `}
+      >
+        <div class="flex flex-row gap-2"><Fragment set:html={MessagesIcon} /> Discussion</div>
+      </a>
+    </div>
 
-  <div class="giscus mb-24"></div>
+    <div class="my-12 flex flex-col gap-4">
+      <div class="text-subtext1 my-2 w-full text-center font-serif text-xl font-medium">
+        {moreText}
+      </div>
+      <ArticleLink article={latestPost} />
+      <ArticleLink article={randomPost} />
+    </div>
+
+    <div class="giscus mb-24"></div>
+  </div>
 
   <script src="@/scripts/zoom.ts"></script>
 

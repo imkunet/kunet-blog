@@ -1,0 +1,20 @@
+/* really bad hack for expressive code collapsible sections to work with tailwind typography */
+details.ec-section > summary > div.ec-line > div.code {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* pasted from stackoverflow because this is just one of those things */
+/* https://stackoverflow.com/a/49278385 */
+.no-scrollbar {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
+}

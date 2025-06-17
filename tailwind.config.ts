@@ -1,17 +1,7 @@
-import catppuccin from '@catppuccin/tailwindcss';
-import typography from '@tailwindcss/typography';
+import { type Config } from 'tailwindcss';
 
-/** @type {import('tailwindcss').Config} */
-export default {
+const config: Config = {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-  darkMode: [
-    'variant',
-    [
-      '@media (scripting: none) and (prefers-color-scheme: dark) { & }',
-      "@media (prefers-color-scheme: dark) { &:not([data-theme='light'].latte *) }",
-      '&:is(.macchiato *)',
-    ],
-  ],
   theme: {
     extend: {
       typography: {
@@ -30,11 +20,11 @@ export default {
                 content: '"" !important',
               },
               background: 'rgba(0, 0, 0, 0.1)',
-              color: 'theme(colors.pink.500) !important',
+              color: 'var(--color-hotpink) !important',
               padding: '0.125rem 0.25rem',
               'border-radius': '0.25rem',
               'font-family': 'MonaspaceRadon, Lilex, monospace',
-              'font-weight': 400,
+              'font-weight': 600,
               'text-decoration-color': 'currentColor',
             },
             blockquote: {
@@ -47,15 +37,12 @@ export default {
               },
             },
             a: {
-              color: 'theme(colors.pink.500)',
-              'text-decoration-color': 'rgba(236, 72, 153, 0.8)',
+              color: 'var(--color-hotpink)',
+              'text-decoration-color': 'var(--color-hotpink-light)',
               'text-decoration-style': 'dotted',
             },
             img: {
               'border-radius': '0.5rem',
-              //'background-color': 'rgb(var(--ctp-mantle))',
-              //'box-shadow': '0 0 0.7rem #00000026',
-              //border: '0.1rem solid #00000026',
               'margin-left': 'auto',
               'margin-right': 'auto',
             },
@@ -78,11 +65,28 @@ export default {
             },
           },
         },
+        article: {
+          css: {
+            h2: {
+              'font-family': 'var(--font-serif)',
+            },
+            h3: {
+              'font-family': 'var(--font-serif)',
+            },
+            h4: {
+              'font-family': 'var(--font-serif)',
+            },
+            h5: {
+              'font-family': 'var(--font-serif)',
+            },
+            h6: {
+              'font-family': 'var(--font-serif)',
+            },
+          },
+        },
       },
     },
-    fontFamily: {
-      sans: ['Inter', 'ui-sans-serif', 'sans-serif'],
-    },
   },
-  plugins: [typography, catppuccin],
 };
+
+export default config;

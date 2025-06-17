@@ -1,99 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
-@font-face {
-  font-family: 'Lilex';
-  /* https://blog.kunet.dev/fonts/Lilex.License.md */
-  src: url(/fonts/Lilex.woff2) format('woff2');
-}
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@config '#/tailwind.config.ts';
 
-@font-face {
-  font-family: 'MonaspaceRadon';
-  /* https://blog.kunet.dev/fonts/MonaSpaceRadon.License.md */
-  src: url(/fonts/MonaspaceRadon.woff2) format('woff2');
-}
+@import '@/styles/ctp.css';
+@import '@/styles/theme.css';
 
-:root {
-  font-family: Inter, sans-serif;
-  font-feature-settings:
-    'liga' 1,
-    'calt' 1; /* fix for Chrome */
-}
-
-@supports (font-variation-settings: normal) {
-  :root {
-    font-family: InterVariable, sans-serif;
-  }
-}
-
-@media (scripting: none) {
-  .yesscript {
-    display: none;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    html {
-      color-scheme: dark;
-    }
-  }
-}
-
-html[data-theme='light'] {
-  color-scheme: light;
-}
-
-html[data-theme='dark'] {
-  color-scheme: dark;
-}
-
-.embedded-markdown > * {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-.tight-markdown > * {
-  margin-top: 0.75rem !important;
-  margin-bottom: 0.75rem !important;
-}
-
-/* really bad hack for expressive code collapsible sections to work with tailwind typography */
-details.ec-section > summary > div.ec-line > div.code {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.fade-out {
-  animation: fadeOut 300ms forwards;
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-@keyframes drawIn {
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* pasted from stackoverflow because this is just one of those things */
-/* https://stackoverflow.com/a/49278385 */
-.no-scrollbar {
-  overflow-y: scroll;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  /* WebKit */
-  width: 0;
-  height: 0;
-}
+@import '@/styles/underline.css';
+@import '@/styles/dark.css';
+@import '@/styles/font.css';
+@import '@/styles/fixes.css';
+@import '@/styles/markdown.css';

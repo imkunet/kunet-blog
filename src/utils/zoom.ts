@@ -1,11 +1,7 @@
 import '@/styles/zoom.css';
 import mediumZoom from 'medium-zoom/dist/pure';
 
-export const zoom = mediumZoom({
-  margin: 12,
-  background: 'rgba(0, 0, 0, 0.4)',
-  scrollOffset: 50,
-});
+export const zoom = mediumZoom({ margin: 12, background: 'rgba(0, 0, 0, 0.4)', scrollOffset: 50 });
 
 const setFacadeBorderRadius = (borderRadius: string) => {
   const activeImage = document.querySelector(

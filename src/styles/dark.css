@@ -1,0 +1,55 @@
+@media (scripting: none) {
+  @media (prefers-color-scheme: dark) {
+    html {
+      color-scheme: dark;
+    }
+  }
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@custom-variant dark {
+  @media (scripting: none) and (prefers-color-scheme: dark) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where([data-theme="system"], [data-theme="system"] *) {
+      @slot;
+    }
+  }
+
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+
+  &:is(.macchiato *) {
+    @slot;
+  }
+}
+
+@custom-variant light {
+  @media (scripting: none) and (prefers-color-scheme: light) {
+    @slot;
+  }
+
+  &:where([data-theme="light"], [data-theme="light"] *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: light) {
+    &:where([data-theme="system"], [data-theme="system"] *) {
+      @slot;
+    }
+  }
+
+  &:is(.latte *) {
+    @slot;
+  }
+}

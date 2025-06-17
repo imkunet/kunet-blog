@@ -12,7 +12,7 @@ a:has(span.link-heading) {
 }
 
 a:has(span.link-heading):hover {
-  opacity: 70%;
+  opacity: 100%;
 }
 
 .prose :where(div.expressive-code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
