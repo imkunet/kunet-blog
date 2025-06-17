@@ -7,3 +7,12 @@
   margin-top: 0.75rem !important;
   margin-bottom: 0.75rem !important;
 }
+
+code {
+  &::before {
+    content: "" !important;
+  }
+  &::after {
+    content: "" !important;
+  }
+}
