@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type { Root } from 'mdast';
+
 import { toString } from 'mdast-util-to-string';
 import readingTime from 'reading-time';
 
@@ -6,12 +9,10 @@ import readingTime from 'reading-time';
 // now in TypeScript
 // but the types aren't useful...
 
-export const remarkReadTime = () => {
-  // c'est la vie
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (tree: Root, { data }: any) => {
-    const text = toString(tree);
-    const readTime = readingTime(text);
-    data.astro.frontmatter.readingTime = readTime.text;
-  };
+const plugin = (tree: Root, { data }: any) => {
+  const text = toString(tree);
+  const readTime = readingTime(text);
+  data.astro.frontmatter.readingTime = readTime.text;
 };
+
+export const remarkReadTime = () => plugin;

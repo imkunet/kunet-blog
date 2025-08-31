@@ -1,19 +1,24 @@
 const localizeDatePublished = () => {
-  const elements = document.querySelectorAll('[data-date]');
+  const elements = document.querySelectorAll(
+    `[data-date]`,
+  ) as unknown as HTMLElement[];
 
   elements.forEach((element) => {
-    const date = element.getAttribute('data-date');
-    if (date === null) return;
+    const date = element.dataset.date;
+    if (!date) return;
 
-    element.textContent = new Date(parseInt(date)).toLocaleDateString(undefined, {
-      timeZone: 'UTC',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    element.textContent = new Date(Number.parseInt(date)).toLocaleDateString(
+      undefined,
+      {
+        day: `numeric`,
+        month: `long`,
+        timeZone: `UTC`,
+        year: `numeric`,
+      },
+    );
 
-    element.removeAttribute('data-date');
+    delete element.dataset.date;
   });
 };
 
-document.addEventListener('astro:page-load', () => localizeDatePublished());
+document.addEventListener(`astro:page-load`, () => localizeDatePublished());

@@ -16,14 +16,14 @@ which involved a lot of heavy obfuscation that needed getting past. They wrote
 deobfuscation tools while also floating the idea of writing an obfuscator, and
 initially I shot it down.
 
-> "Well surely with the amount of stuff out there every effective
-> transformation of obfuscated code has been written and is already out there,
-> what good would cooking your own be?"
+> "Well surely with the amount of stuff out there every effective transformation
+> of obfuscated code has been written and is already out there, what good would
+> cooking your own be?"
 
 \--was about what I said.
 
-The idea though in my head grew stronger as I kept remembering how strange of
-a language JavaScript is. How many ways there is to express a certain outcome
+The idea though in my head grew stronger as I kept remembering how strange of a
+language JavaScript is. How many ways there is to express a certain outcome
 which was a far cry from the rigidness and hard set on the happy path languages
 I was thinking in at the time (Zig, Rust, Go).
 
@@ -51,9 +51,9 @@ hand at writing this obfuscator and play around with some ideas.
 The very first things I did were to decide how I was going to go about
 manipulating the source code and testing my obfuscation.
 
-- For source manipulation, I just went with `@babel/core` since there was
-  the aforementioned person in the [beginnings](#the-beginnings) already had
-  code that worked and took JavaScript and manipulated it.
+- For source manipulation, I just went with `@babel/core` since there was the
+  aforementioned person in the [beginnings](#the-beginnings) already had code
+  that worked and took JavaScript and manipulated it.
 - For testing, I wrote a simple script which took JavaScript test files,
   obfuscated them to a copy then ran both the not obfuscated and obfuscated
   scripts and compared their standard outputs. If they didn't match then I'd at
@@ -70,10 +70,10 @@ The idea I had was to just convert the string to `base64` at obfuscation time
 then turn it back into text at runtime.
 
 It was really simple, and it got me into the hang of writing transformers for
-Babel's AST. There's also a really handy [AST Explorer](https://astexplorer.net/)
-which lets you easily visualize Babel's AST without having to crawl back to
-`console.log(...)` (just make sure to change the parser at the top of the screen
-to `@babel/parser` mode).
+Babel's AST. There's also a really handy
+[AST Explorer](https://astexplorer.net/) which lets you easily visualize Babel's
+AST without having to crawl back to `console.log(...)` (just make sure to change
+the parser at the top of the screen to `@babel/parser` mode).
 
 ![Screenshot of AST Explorer](ast-explorer.png 'We can easily pick out leaves of interest in our AST')
 
@@ -93,10 +93,17 @@ import { traverse, types } from '@babel/core';
 export const transformAtob = (root: types.Node) => {
   traverse(root, {
     StringLiteral(path) {
-      if (path.node.extra && path.node.extra.clear === 'false' && Math.random() > 0.25) return;
+      if (
+        path.node.extra &&
+        path.node.extra.clear === 'false' &&
+        Math.random() > 0.25
+      )
+        return;
       const stringLiteral = types.stringLiteral(btoa(path.node.value));
       stringLiteral.extra = { clear: 'false' };
-      path.replaceWith(types.callExpression(types.identifier('atob'), [stringLiteral]));
+      path.replaceWith(
+        types.callExpression(types.identifier('atob'), [stringLiteral]),
+      );
     },
   });
 };
@@ -119,8 +126,8 @@ give this one a try yourself!
 ## Conclusion
 
 While the transformation shown might as well be a wet napkin in terms of
-resistance to reverse-engineering, it's a start to a series of transformers
-that will hopefully make even simple programs absolutely unreadable.
+resistance to reverse-engineering, it's a start to a series of transformers that
+will hopefully make even simple programs absolutely unreadable.
 
 Here's a teaser of what's hopefully to come:
 

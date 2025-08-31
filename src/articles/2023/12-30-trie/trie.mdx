@@ -20,8 +20,9 @@ address as a 32 bit integer, so a CIDR notation is literally a _prefix_ that is
 
 This is pretty useful for one big thing: finding out which operators are
 associated with a specific IP address. As an example, as of the time of writing
-this, one of the CIDR prefixes that Cloudflare [announces](https://bgp.tools/prefix/1.1.1.0/24)
-is `1.1.1.0/24` for their famous `1.1.1.1` DNS service.
+this, one of the CIDR prefixes that Cloudflare
+[announces](https://bgp.tools/prefix/1.1.1.0/24) is `1.1.1.0/24` for their
+famous `1.1.1.1` DNS service.
 
 Since the prefix's length is 24 bits, that means there is 8 bits at the end of
 the address that can be changed. Because $2^8 = 256$, that means this CIDR
@@ -37,7 +38,7 @@ BGP.tools provides a way to get the a visibility table with ASNs through
 `cat -v table.txt | wc -l` yields 1,217,754 prefixes! That's a lot of prefixes
 but includes both IPv4 and IPv6. Filtering to just IPv4 using
 `grep -v -F ':' table.txt | wc -l` gives 1,006,324. This is a perhaps more
-managable number.
+manageable number.
 
 ## Writing it in Zig
 
@@ -156,7 +157,7 @@ pub fn insert(self: *@This(), ip: u32, length: u5, asn: i32) !void {
     }
 
     // otherwise since there's no array here we can just allocate
-    // one and set the array's singlular value to the asn and
+    // one and set the array's singular value to the asn and
     // set the node's asn array to the pointer.
     const new_asns = try allocator.alloc(i32, 1);
     new_asns[0] = asn;

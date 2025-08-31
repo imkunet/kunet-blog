@@ -10,9 +10,9 @@
 
 code {
   &::before {
-    content: "" !important;
+    content: '' !important;
   }
   &::after {
-    content: "" !important;
+    content: '' !important;
   }
 }

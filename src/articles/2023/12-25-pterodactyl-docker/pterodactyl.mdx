@@ -8,36 +8,44 @@ tags: ['docker', 'guide', 'pterodactyl']
 
 ## Preamble
 
-Pterodactyl's great! Unfortunately the documentation on how to install Pterodactyl is still lacking.
+Pterodactyl's great! Unfortunately the documentation on how to install
+Pterodactyl is still lacking.
 
-When I was in middle school (_in the United States_), I tried to install Pterodactyl and ended up
-having to restart at least `10` times because of minor mistakes. The only installations that ended
-up working first try were the installer scripts which often harbored their own issues.
+When I was in middle school (_in the United States_), I tried to install
+Pterodactyl and ended up having to restart at least `10` times because of minor
+mistakes. The only installations that ended up working first try were the
+installer scripts which often harbored their own issues.
 
-We now live in the age where you can just use Docker and Docker Compose to deploy everything easily.
-It's a shame though that the [official documentation](https://pterodactyl.io/panel/1.0/getting_started.html)
+We now live in the age where you can just use Docker and Docker Compose to
+deploy everything easily. It's a shame though that the
+[official documentation](https://pterodactyl.io/panel/1.0/getting_started.html)
 has no Docker Compose instructions to show for it.
 
 Enough waffling. Here's how to easily configure it.
 
 ## Basic Assumptions
 
-These are some basic requirements and if you know what you are doing, this guide is still fine to follow just adjust accordingly:
+These are some basic requirements and if you know what you are doing, this guide
+is still fine to follow just adjust accordingly:
 
-- You have a domain and it is correctly set up to point `panel.domain.com` and `node.domain.com` to your server
+- You have a domain and it is correctly set up to point `panel.domain.com` and
+  `node.domain.com` to your server
 - Docker is installed and working
   - Running on root (`cgroupsv2` doesn't work on rootless)
   - On a system that supports `cgroupsv2` (or else resource limits don't work)
   - Docker compose works
 - Firewall allows: 80/tcp, 443/tcp, 443/udp, 8080/tcp, 8080/udp, and 2022/tcp
 
-_Why open 8080/tcp and 8080/udp when we could just use 443? Pterodactyl is rather picky and using 443 exclusively
-does not play well with Caddy. It is doable though and I encourage you to give it a try if you think you've got the chops._
+_Why open 8080/tcp and 8080/udp when we could just use 443? Pterodactyl is
+rather picky and using 443 exclusively does not play well with Caddy. It is
+doable though and I encourage you to give it a try if you think you've got the
+chops._
 
-> **NOTE**: If the `docker compose` command isn't resolving for you, you might need to use `docker-compmose` instead.
+> **NOTE**: If the `docker compose` command isn't resolving for you, you might
+> need to use `docker-compmose` instead.
 
-In the course of the guide, you should place all the individual components in separate folders.
-A file structre like the following should suffice:
+In the course of the guide, you should place all the individual components in
+separate folders. A file structure like the following should suffice:
 
 ```plaintext attribution="File structure"
 .
@@ -157,7 +165,8 @@ docker compose up -d
 docker exec -it panel php artisan p:user:make
 ```
 
-You won't be able to reach the panel yet because we haven't set up Caddy yet. We'll come back to that.
+You won't be able to reach the panel yet because we haven't set up Caddy yet.
+We'll come back to that.
 
 ## Wings Configuration
 
@@ -193,7 +202,8 @@ networks:
     driver: bridge
 ```
 
-Don't start `wings` quite yet, we'll get back to that soon enough. (It needs to be configured first before starting in order to do anything useful!)
+Don't start `wings` quite yet, we'll get back to that soon enough. (It needs to
+be configured first before starting in order to do anything useful!)
 
 ## Caddy Config
 
@@ -215,7 +225,9 @@ services:
       - ./caddy:/etc/caddy
       - ./caddy_data:/data
       - ./caddy_config:/config
-    command: "sh -c 'caddy fmt -w /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile'"
+    command:
+      "sh -c 'caddy fmt -w /etc/caddy/Caddyfile && caddy run --config
+      /etc/caddy/Caddyfile --adapter caddyfile'"
 networks:
   caddy:
     external: true
@@ -223,8 +235,8 @@ networks:
     driver: bridge
 ```
 
-And inside the `caddy` folder which is in the same folder that the Caddy `docker-compose.yml` file is
-in is the `Caddyfile` (see file structure):
+And inside the `caddy` folder which is in the same folder that the Caddy
+`docker-compose.yml` file is in is the `Caddyfile` (see file structure):
 
 ```plaintext attribution="File structure"
 .
@@ -239,8 +251,8 @@ in is the `Caddyfile` (see file structure):
 ...
 ```
 
-Change the domains to the domains to your domains but
-keep the `http://panel` and `http://wings:8080` as they are automatically correctly routed to the other
+Change the domains to the domains to your domains but keep the `http://panel`
+and `http://wings:8080` as they are automatically correctly routed to the other
 containers through the magic of Docker's DNS:
 
 ```Caddyfile title="caddy/caddy/Caddyfile"
@@ -253,7 +265,10 @@ node.kunet.dev:8080 {
 }
 ```
 
-These commands on Linux will increase the maximum UDP buffer size, which you might want to do for [performance reasons](https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes) for QUIC (which runs on UDP) and is enabled by default in Caddy:
+These commands on Linux will increase the maximum UDP buffer size, which you
+might want to do for
+[performance reasons](https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes)
+for QUIC (which runs on UDP) and is enabled by default in Caddy:
 
 ```bash title="(as root)" attribution="Increase UDP buffer size"
 # needs to be run as root
@@ -275,18 +290,21 @@ You'll want to make sure the following options are in order:
 
 - Behind Proxy (we are indeed behind a proxy)
 
-Once it's been created, head to the configuration tab and copy it all to clipboard.
+Once it's been created, head to the configuration tab and copy it all to
+clipboard.
 
-You'll want to place the contents of the file into the path `/etc/pterodactyl/config.yml`.
-After that, you're free to start up `wings`.
+You'll want to place the contents of the file into the path
+`/etc/pterodactyl/config.yml`. After that, you're free to start up `wings`.
 
 ```bash attribution="Start Wings (in the wings folder)"
 docker-compose up -d
 ```
 
-When you click on the side bar button for "Nodes" and see a green heart icon next to your new node,
-you'll know that the configuration has correctly worked, and you can begin making servers to your heart's content.
+When you click on the side bar button for "Nodes" and see a green heart icon
+next to your new node, you'll know that the configuration has correctly worked,
+and you can begin making servers to your heart's content.
 
 ## Conclusion
 
-This guide is especially finnicky and difficult, ask questions in the comments or [contact me](https://github.com/imkunet) directly.
+This guide is especially finnicky and difficult, ask questions in the comments
+or [contact me](https://github.com/imkunet) directly.

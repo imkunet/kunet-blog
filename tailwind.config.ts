@@ -1,86 +1,86 @@
 import { type Config } from 'tailwindcss';
 
 const config: Config = {
-  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  content: [`./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}`],
   theme: {
     extend: {
       typography: {
-        DEFAULT: {
+        article: {
           css: {
-            pre: {
-              'margin-top': 0,
-              'margin-bottom': 0,
-              'border-radius': 0,
+            h2: {
+              'font-family': `var(--font-serif)`,
             },
-            code: {
-              '&::before': {
-                content: '"" !important',
-              },
-              '&::after': {
-                content: '"" !important',
-              },
-              background: 'rgba(0, 0, 0, 0.1)',
-              color: 'var(--color-hotpink) !important',
-              padding: '0.125rem 0.25rem',
-              'border-radius': '0.25rem',
-              'font-family': 'MonaspaceRadon, Lilex, monospace',
-              'font-weight': 600,
-              'text-decoration-color': 'currentColor',
+            h3: {
+              'font-family': `var(--font-serif)`,
             },
-            blockquote: {
-              'font-style': 'normal',
-              'p::before': {
-                content: '"" !important',
-              },
-              'p::after': {
-                content: '"" !important',
-              },
+            h4: {
+              'font-family': `var(--font-serif)`,
             },
-            a: {
-              color: 'var(--color-hotpink)',
-              'text-decoration-color': 'var(--color-hotpink-light)',
-              'text-decoration-style': 'dotted',
+            h5: {
+              'font-family': `var(--font-serif)`,
             },
-            img: {
-              'border-radius': '0.5rem',
-              'margin-left': 'auto',
-              'margin-right': 'auto',
+            h6: {
+              'font-family': `var(--font-serif)`,
             },
           },
         },
-        xl: {
+        DEFAULT: {
           css: {
+            a: {
+              color: `var(--color-hotpink)`,
+              'text-decoration-color': `var(--color-hotpink-light)`,
+              'text-decoration-style': `dotted`,
+            },
+            blockquote: {
+              'font-style': `normal`,
+              'p::after': {
+                content: `"" !important`,
+              },
+              'p::before': {
+                content: `"" !important`,
+              },
+            },
+            code: {
+              '&::after': {
+                content: `"" !important`,
+              },
+              '&::before': {
+                content: `"" !important`,
+              },
+              background: `rgba(0, 0, 0, 0.1)`,
+              'border-radius': `0.25rem`,
+              color: `var(--color-hotpink) !important`,
+              'font-family': `MonaspaceRadon, Lilex, monospace`,
+              'font-weight': 600,
+              padding: `0.125rem 0.25rem`,
+              'text-decoration-color': `currentColor`,
+            },
+            img: {
+              'border-radius': `0.5rem`,
+              'margin-left': `auto`,
+              'margin-right': `auto`,
+            },
             pre: {
-              'margin-top': 0,
-              'margin-bottom': 0,
               'border-radius': 0,
+              'margin-bottom': 0,
+              'margin-top': 0,
             },
           },
         },
         linked: {
           css: {
             a: {
-              'text-decoration': 'none !important',
-              color: 'unset !important',
+              color: `unset !important`,
+              'text-decoration': `none !important`,
             },
           },
         },
-        article: {
+        xl: {
           css: {
-            h2: {
-              'font-family': 'var(--font-serif)',
-            },
-            h3: {
-              'font-family': 'var(--font-serif)',
-            },
-            h4: {
-              'font-family': 'var(--font-serif)',
-            },
-            h5: {
-              'font-family': 'var(--font-serif)',
-            },
-            h6: {
-              'font-family': 'var(--font-serif)',
+            pre: {
+              'border-radius': 0,
+              'margin-bottom': 0,
+              'margin-top': 0,
             },
           },
         },

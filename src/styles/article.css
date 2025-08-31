@@ -15,7 +15,10 @@ a:has(span.link-heading):hover {
   opacity: 100%;
 }
 
-.prose :where(div.expressive-code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+.prose
+  :where(div.expressive-code):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  ) {
   margin-top: 2rem;
   margin-bottom: 1.5rem;
 }
@@ -25,5 +28,11 @@ figure.image-figure > * {
 }
 
 .candy-stripes {
-  background: repeating-linear-gradient(45deg, #e99d0f, #e99d0f 10px, #d08700 10px, #d08700 20px);
+  background: repeating-linear-gradient(
+    45deg,
+    #e99d0f,
+    #e99d0f 10px,
+    #d08700 10px,
+    #d08700 20px
+  );
 }

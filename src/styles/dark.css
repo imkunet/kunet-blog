@@ -1,8 +1,6 @@
-@media (scripting: none) {
-  @media (prefers-color-scheme: dark) {
-    html {
-      color-scheme: dark;
-    }
+@media (scripting: none) and (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
   }
 }
 
@@ -20,12 +18,12 @@ html[data-theme='dark'] {
   }
 
   @media (prefers-color-scheme: dark) {
-    &:where([data-theme="system"], [data-theme="system"] *) {
+    &:where([data-theme='system'], [data-theme='system'] *) {
       @slot;
     }
   }
 
-  &:where([data-theme="dark"], [data-theme="dark"] *) {
+  &:where([data-theme='dark'], [data-theme='dark'] *) {
     @slot;
   }
 
@@ -39,12 +37,12 @@ html[data-theme='dark'] {
     @slot;
   }
 
-  &:where([data-theme="light"], [data-theme="light"] *) {
+  &:where([data-theme='light'], [data-theme='light'] *) {
     @slot;
   }
 
   @media (prefers-color-scheme: light) {
-    &:where([data-theme="system"], [data-theme="system"] *) {
+    &:where([data-theme='system'], [data-theme='system'] *) {
       @slot;
     }
   }
