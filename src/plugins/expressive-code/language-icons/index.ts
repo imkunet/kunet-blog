@@ -27,7 +27,7 @@ export const languageIcons = () =>
             `a`,
             {
               'aria-hidden': true,
-              class: icon.icon + ` no-underline`,
+              class: `${icon.icon} no-underline`,
               href: icon.url,
               tabindex: -1,
               target: `_blank`,

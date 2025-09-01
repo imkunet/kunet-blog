@@ -1,4 +1,4 @@
-import { type ResolverContext } from 'astro-expressive-code';
+import type { ResolverContext } from 'astro-expressive-code';
 
 export const getAttributionBaseStyles = ({ cssVar }: ResolverContext) => {
   const tabBarBackground = [

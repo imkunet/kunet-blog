@@ -24,9 +24,8 @@ const buildFigure = ({ properties }: Element) => {
       title: embeddedMarkdownToString(caption.toString()),
     };
 
-  const renderedCaption =
-    caption ?
-      h(`figcaption`, embeddedMarkdownToHast(caption.toString()) as Nodes)
+  const renderedCaption = caption
+    ? h(`figcaption`, embeddedMarkdownToHast(caption.toString()) as Nodes)
     : ``;
   return h(`figure`, { class: `image-figure` }, [
     h(`img`, imageProps),
@@ -42,13 +41,13 @@ const plugin = (tree: Root) => {
     if (images.length === 0) return;
 
     tree.children[index ?? 0] =
-      images.length === 1 ?
-        images[0]
-      : (tree.children[index ?? 0] = h(
-          `div`,
-          { class: `image-figure-container` },
-          images,
-        ));
+      images.length === 1
+        ? images[0]
+        : (tree.children[index ?? 0] = h(
+            `div`,
+            { class: `image-figure-container` },
+            images,
+          ));
   });
 };
 

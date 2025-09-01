@@ -7,15 +7,14 @@ const localizeDatePublished = () => {
     const date = element.dataset.date;
     if (!date) return;
 
-    element.textContent = new Date(Number.parseInt(date)).toLocaleDateString(
-      undefined,
-      {
-        day: `numeric`,
-        month: `long`,
-        timeZone: `UTC`,
-        year: `numeric`,
-      },
-    );
+    element.textContent = new Date(
+      Number.parseInt(date, 10),
+    ).toLocaleDateString(undefined, {
+      day: `numeric`,
+      month: `long`,
+      timeZone: `UTC`,
+      year: `numeric`,
+    });
 
     delete element.dataset.date;
   });

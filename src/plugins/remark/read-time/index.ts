@@ -9,6 +9,7 @@ import readingTime from 'reading-time';
 // now in TypeScript
 // but the types aren't useful...
 
+// biome-ignore lint/suspicious/noExplicitAny: unimportant
 const plugin = (tree: Root, { data }: any) => {
   const text = toString(tree);
   const readTime = readingTime(text);

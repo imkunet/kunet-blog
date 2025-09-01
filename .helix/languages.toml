@@ -1,0 +1,36 @@
+[[language]]
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "%{buffer_name}"] }
+language-servers = ["typescript-language-server", "biome", "typos"]
+name = "typescript"
+
+[[language]]
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "%{buffer_name}"] }
+language-servers = ["astro-ls", "biome", "typos"]
+name = "astro"
+
+[[language]]
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "%{buffer_name}"] }
+name = "json"
+
+[[language]]
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "%{buffer_name}"] }
+name = "jsonc"
+
+[[language]]
+auto-format = true
+language-servers = ["remark-language-server", "typos"]
+name = "markdown"
+
+[language-server.biome]
+args = ["lsp-proxy"]
+command = "biome"
+
+[language-server.remark-language-server]
+args = ["remark-language-server", "--stdio"]
+config.remark.requireConfig = true
+command = "bunx"
+

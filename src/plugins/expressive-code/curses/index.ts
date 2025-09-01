@@ -1,5 +1,5 @@
 import { definePlugin } from 'astro-expressive-code';
-import { type Element } from 'astro-expressive-code/hast';
+import type { Element } from 'astro-expressive-code/hast';
 
 // Curses
 // Makes all the italic code a different font entirely for *style*.

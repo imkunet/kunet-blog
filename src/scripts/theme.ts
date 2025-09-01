@@ -33,9 +33,11 @@ const loadPageElements = () => {
   themeButton?.addEventListener(`click`, () => {
     const currentTheme = localStorage.getItem(`theme`) ?? `system`;
     const newTheme =
-      currentTheme === `system` ? `light`
-      : currentTheme === `light` ? `dark`
-      : `system`;
+      currentTheme === `system`
+        ? `light`
+        : currentTheme === `light`
+          ? `dark`
+          : `system`;
     console.log(`Current theme is`, currentTheme);
     console.log(`Switching theme to`, newTheme);
     localStorage.setItem(`theme`, newTheme);

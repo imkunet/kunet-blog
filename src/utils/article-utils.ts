@@ -10,12 +10,12 @@ export const extractFilePathData = (
   const dateAndSlug = fileName.split(`-`);
   const yearPart = pathParts.at(-3);
 
-  const year = Number.parseInt(yearPart);
-  const month = Number.parseInt(dateAndSlug[0]);
-  const day = Number.parseInt(dateAndSlug[1]);
+  const year = Number.parseInt(yearPart, 10);
+  const month = Number.parseInt(dateAndSlug[0], 10);
+  const day = Number.parseInt(dateAndSlug[1], 10);
 
   const title = dateAndSlug.slice(2).join(`-`);
-  const date = Date.parse(year + `-` + month + `-` + day);
+  const date = Date.parse(`${year}-${month}-${day}`);
 
   return { date, title };
 };

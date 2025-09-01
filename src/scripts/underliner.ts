@@ -9,7 +9,7 @@ const createUnderliner = (parent: HTMLElement): [() => void, () => void] => {
   parent.style.position = `relative`;
   parent.style.display = `inline-block`;
 
-  let currentAnnotation: SVGElement | undefined = undefined;
+  let currentAnnotation: SVGElement | undefined;
 
   const animateIn = () => {
     if (currentAnnotation) currentAnnotation.remove();

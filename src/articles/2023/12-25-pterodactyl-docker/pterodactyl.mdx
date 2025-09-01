@@ -30,10 +30,12 @@ is still fine to follow just adjust accordingly:
 
 - You have a domain and it is correctly set up to point `panel.domain.com` and
   `node.domain.com` to your server
+
 - Docker is installed and working
   - Running on root (`cgroupsv2` doesn't work on rootless)
   - On a system that supports `cgroupsv2` (or else resource limits don't work)
   - Docker compose works
+
 - Firewall allows: 80/tcp, 443/tcp, 443/udp, 8080/tcp, 8080/udp, and 2022/tcp
 
 _Why open 8080/tcp and 8080/udp when we could just use 443? Pterodactyl is
