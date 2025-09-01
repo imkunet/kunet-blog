@@ -6,9 +6,9 @@ export const extractFilePathData = (
   filePath: string,
 ): { date: number; title: string } => {
   const pathParts = filePath.split(`/`);
-  const fileName = pathParts.at(-2);
+  const fileName = pathParts.at(-2)!;
   const dateAndSlug = fileName.split(`-`);
-  const yearPart = pathParts.at(-3);
+  const yearPart = pathParts.at(-3)!;
 
   const year = Number.parseInt(yearPart, 10);
   const month = Number.parseInt(dateAndSlug[0], 10);

@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "bunx biome lint --fix; bunx biome format --write; bunx prettier '**/*.mdx' -w; bunx remark-cli . -e mdx"
+    "lint": "bunx biome lint --fix; bunx biome format --write; bunx prettier '**/*.mdx' -w; bunx remark-cli . -e mdx; bunx tsc"
   },
   "dependencies": {
     "@astrojs/check": "0.9.4",
