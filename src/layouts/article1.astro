@@ -1,15 +1,21 @@
 ---
 import '@/styles/article.css';
-import ArticleLink from '@/components/ArticleLink.astro';
+import ArticleLink from '@/components/article-link.astro';
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
-import Base from '@/layouts/Base.astro';
+import Base from '@/layouts/base.astro';
 import type { Frontmatter } from '@/utils/article-types';
-import { embeddedMarkdownToHtml, embeddedMarkdownToString } from '@/utils/embedded-markdown';
+import {
+  embeddedMarkdownToHtml,
+  embeddedMarkdownToString,
+} from '@/utils/embedded-markdown';
 import GitHubIcon from '@/assets/icons/github.svg?raw';
 import MessagesIcon from '@/assets/icons/messages-square.svg?raw';
 import EyeOff from '@/assets/icons/eye-off.svg?raw';
-import { allArticlesButHidden, extractFilePathData } from '@/utils/article-utils';
+import {
+  allArticlesButHidden,
+  extractFilePathData,
+} from '@/utils/article-utils';
 
 interface Props {
   frontmatter: Frontmatter;
@@ -20,7 +26,9 @@ interface Props {
 const { frontmatter, key, file } = Astro.props;
 
 const renderedTitle = embeddedMarkdownToHtml(`# ${frontmatter.title}`);
-const renderedSubtitle = embeddedMarkdownToHtml(`## ${frontmatter.description}`);
+const renderedSubtitle = embeddedMarkdownToHtml(
+  `## ${frontmatter.description}`,
+);
 
 const rawTitle = embeddedMarkdownToString(frontmatter.title);
 const rawDescription = embeddedMarkdownToString(frontmatter.description);
@@ -31,9 +39,12 @@ const filePath = file.split('/').splice(-5).join('/');
 // https://docs.astro.build/en/recipes/dynamically-importing-images/
 
 const parentFilePath = filePath.split('/').slice(0, -1).join('/');
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/articles/**/*.png', {
-  eager: true,
-});
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/articles/**/*.png',
+  {
+    eager: true,
+  },
+);
 const heroImage = Object.keys(images).find(
   (v) =>
     frontmatter.hero !== undefined &&

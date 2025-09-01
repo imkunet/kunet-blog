@@ -1,9 +1,0 @@
----
-import ArticleLink from '@/components/ArticleLink.astro';
-import { allArticlesButHidden, extractFilePathData } from '@/utils/article-utils';
-
-const { rawKey } = Astro.props;
-const foundArticle = allArticlesButHidden.find((v) => extractFilePathData(v.file).title === rawKey);
----
-
-<ArticleLink article={foundArticle!} />

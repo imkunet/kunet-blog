@@ -1,7 +1,10 @@
 ---
 import type { Frontmatter } from '@/utils/article-types';
 import { extractFilePathData } from '@/utils/article-utils';
-import { embeddedMarkdownToHtml, stripOutsideTags } from '@/utils/embedded-markdown';
+import {
+  embeddedMarkdownToHtml,
+  stripOutsideTags,
+} from '@/utils/embedded-markdown';
 import type { MDXInstance } from 'astro';
 interface Props {
   article: MDXInstance<Frontmatter>;
@@ -12,7 +15,9 @@ const { date, title } = extractFilePathData(article.file);
 
 const frontmatter = article.frontmatter;
 
-const renderedTitle = stripOutsideTags(embeddedMarkdownToHtml(frontmatter.title));
+const renderedTitle = stripOutsideTags(
+  embeddedMarkdownToHtml(frontmatter.title),
+);
 const renderedSubtitle = embeddedMarkdownToHtml(frontmatter.description);
 ---
 

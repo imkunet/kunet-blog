@@ -25,6 +25,22 @@
   },
   "formatter": {
     "enabled": true,
+    "includes": [
+      "**/*.ts",
+      "**/*.mts",
+      "**/*.tsx",
+      "**/*.js",
+      "**/*.mjs",
+      "**/*.jsx",
+      "**/*.json",
+      "**/*.jsonc",
+      "**/*.css",
+      "**/*.astro",
+      "!**/dist",
+      "!**/node_modules",
+      "!**/.direnv",
+      "!**/.astro"
+    ],
     "indentStyle": "space"
   },
   "linter": {

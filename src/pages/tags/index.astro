@@ -1,25 +1,23 @@
 ---
-import Base from '@/layouts/Base.astro';
+import Base from '@/layouts/base.astro';
 import { embeddedMarkdownToHtml } from '@/utils/embedded-markdown';
 import Tag from '@/assets/icons/tag.svg?raw';
 import ChevronRight from '@/assets/icons/chevron-right.svg?raw';
 import { allArticlesButHidden } from '@/utils/article-utils';
 
 const tagFrequency = allArticlesButHidden
-  .map((post) => post.frontmatter.tags)
-  .flat()
+  .flatMap((post) => post.frontmatter.tags)
   .reduce<Record<string, number>>((map, tagName) => {
     map[tagName] = (map[tagName] ?? 0) + 1;
     return map;
   }, {});
 
-const frequencyTag = Object.entries(tagFrequency).reduce<Record<number, string[]>>(
-  (map, [tag, frequency]) => {
-    map[frequency] = [...(map[frequency] ?? []), tag].sort();
-    return map;
-  },
-  {},
-);
+const frequencyTag = Object.entries(tagFrequency).reduce<
+  Record<number, string[]>
+>((map, [tag, frequency]) => {
+  map[frequency] = [...(map[frequency] ?? []), tag].sort();
+  return map;
+}, {});
 
 const allFrequencies = Object.keys(frequencyTag)
   .map((v) => parseInt(v))

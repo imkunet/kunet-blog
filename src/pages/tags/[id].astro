@@ -1,6 +1,6 @@
 ---
-import ArticleLink from '@/components/ArticleLink.astro';
-import Base from '@/layouts/Base.astro';
+import ArticleLink from '@/components/article-link.astro';
+import Base from '@/layouts/base.astro';
 import type { Frontmatter } from '@/utils/article-types';
 import type { MDXInstance } from 'astro';
 import { embeddedMarkdownToHtml } from '@/utils/embedded-markdown';
@@ -14,15 +14,16 @@ interface Props {
 export async function getStaticPaths() {
   const allTags: Set<string> = new Set(
     allArticlesButHidden
-      .map((article) => article.frontmatter.tags)
-      .flat()
+      .flatMap((article) => article.frontmatter.tags)
       .filter((v) => v),
   );
 
   return [...allTags].map((tag) => ({
     params: { id: tag },
     props: {
-      posts: allArticlesButHidden.filter((post) => post.frontmatter?.tags?.includes(tag) || false),
+      posts: allArticlesButHidden.filter(
+        (post) => post.frontmatter?.tags?.includes(tag) || false,
+      ),
       tag: tag,
     },
   }));
@@ -30,7 +31,8 @@ export async function getStaticPaths() {
 
 const tagMap: Record<string, string> = {
   guide: 'Little hand written guides for your consumption pleasure!',
-  pterodactyl: 'For the [pterodactyl](https://pterodactyl.io/) management panel',
+  pterodactyl:
+    'For the [pterodactyl](https://pterodactyl.io/) management panel',
   programming: 'All things programming go here!',
 };
 
